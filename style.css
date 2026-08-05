@@ -88,6 +88,18 @@
   --color-hero-overlay-from: rgba(0, 0, 0, 0.35);
   --color-hero-overlay-to: rgba(0, 0, 0, 0.72);
 
+  /* ---- lava-lamp ambient tokens (invariant) ----
+     A deliberate warm palette for the background blobs only -- a
+     signature decorative flourish, not meant to bleed into buttons,
+     links, or any other component. Fixed on purpose (same reasoning
+     as the hero tokens above): the effect should look the same
+     regardless of light/dark theme, like a physical lamp sitting in
+     the room rather than a UI element that reflows with the page. */
+  --color-lava-1: #ff4d4d;
+  --color-lava-2: #ff8a3d;
+  --color-lava-3: #ffb347;
+  --color-lava-4: #ff3d6b;
+
   /* ---- spacing (8px system; 4px is the only allowed half-step) ---- */
   --space-1: 4px;
   --space-2: 8px;
@@ -220,14 +232,20 @@ button:focus-visible {
   * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
 }
 
-/* ---------- Ambient background blobs ----------
+/* ---------- Ambient background: lava-lamp bubbles ----------
    Pure decoration, fixed to the viewport and pinned behind every
    other element (--z-ambient sits below the whole z-index scale).
-   Fills the empty margin space beside the centered content on wide
-   viewports with a slow drifting glow. Colors are reused straight
-   from the accent + contribution-graph scale tokens -- no new
-   palette values introduced. Wherever real content (the hero photo,
-   any .card) has its own opaque background, it fully occludes this
+   Six individually-sized "wax" blobs float and bob up and down like
+   a real lava lamp -- morphing between organic border-radius shapes
+   as they rise and sink, so they read as distinct, slightly wobbly
+   blobs rather than a static glow. Each blob sets its own --rise
+   (vertical travel distance) and --drift (horizontal wander) custom
+   properties; one shared keyframe animation reads both, so all six
+   stay perfectly in sync on shape/rhythm while differing in how far
+   and how fast they travel. Positioned toward the left/right edges
+   so they mostly live in the empty margins beside the centered
+   content on wide viewports; wherever real content has its own
+   opaque background (.card, the hero photo) it fully occludes this
    layer, so it never competes with foreground contrast. Motion is
    covered by the global prefers-reduced-motion kill switch above. */
 .ambient-bg {
@@ -239,31 +257,47 @@ button:focus-visible {
 }
 .ambient-blob {
   position: absolute;
-  width: 44vmax;
-  height: 44vmax;
-  border-radius: var(--radius-circle);
-  background: var(--color-accent);
-  filter: blur(90px);
-  opacity: 0.32;
-  animation: ambientDrift 26s var(--ease-standard) infinite alternate;
+  filter: blur(48px);
+  opacity: 0.55;
+  animation: lavaRise var(--lava-duration, 22s) ease-in-out infinite;
+  animation-delay: var(--lava-delay, 0s);
 }
-.ambient-blob-1 { top: -14vmax; left: -16vmax; }
+.ambient-blob-1 {
+  left: 4vw; bottom: -8vh; width: 22vmin; height: 22vmin;
+  background: var(--color-lava-1);
+  --rise: -46vh; --drift: 4vw; --lava-duration: 21s; --lava-delay: 0s;
+}
 .ambient-blob-2 {
-  bottom: -18vmax; right: -14vmax;
-  background: var(--color-scale-4);
-  animation-duration: 32s;
-  animation-delay: -9s;
+  left: 13vw; bottom: 10vh; width: 13vmin; height: 13vmin;
+  background: var(--color-lava-3);
+  --rise: -30vh; --drift: -3vw; --lava-duration: 17s; --lava-delay: -5s;
 }
 .ambient-blob-3 {
-  top: 38vh; right: -20vmax;
-  background: var(--color-scale-2);
-  animation-duration: 38s;
-  animation-delay: -20s;
+  right: 6vw; bottom: -10vh; width: 24vmin; height: 24vmin;
+  background: var(--color-lava-2);
+  --rise: -52vh; --drift: -5vw; --lava-duration: 26s; --lava-delay: -11s;
 }
-@keyframes ambientDrift {
-  0%   { transform: translate(0, 0) scale(1); }
-  50%  { transform: translate(7vmax, -9vmax) scale(1.15); }
-  100% { transform: translate(-5vmax, 8vmax) scale(0.92); }
+.ambient-blob-4 {
+  right: 15vw; bottom: 24vh; width: 15vmin; height: 15vmin;
+  background: var(--color-lava-4);
+  --rise: -34vh; --drift: 4vw; --lava-duration: 19s; --lava-delay: -8s;
+}
+.ambient-blob-5 {
+  left: 1vw; top: 52vh; width: 12vmin; height: 12vmin;
+  background: var(--color-lava-2);
+  --rise: -28vh; --drift: 3vw; --lava-duration: 23s; --lava-delay: -14s;
+}
+.ambient-blob-6 {
+  right: 2vw; top: 12vh; width: 17vmin; height: 17vmin;
+  background: var(--color-lava-1);
+  --rise: -38vh; --drift: -4vw; --lava-duration: 29s; --lava-delay: -3s;
+}
+@keyframes lavaRise {
+  0%   { transform: translate(0, 0) scale(0.9); border-radius: 42% 58% 63% 37% / 41% 38% 62% 59%; }
+  25%  { transform: translate(calc(var(--drift) * 0.6), calc(var(--rise) * 0.45)) scale(1.05); border-radius: 58% 42% 39% 61% / 62% 55% 45% 38%; }
+  50%  { transform: translate(var(--drift), var(--rise)) scale(1.15); border-radius: 63% 37% 54% 46% / 40% 62% 38% 60%; }
+  75%  { transform: translate(calc(var(--drift) * 0.4), calc(var(--rise) * 0.6)) scale(1); border-radius: 46% 54% 40% 60% / 55% 45% 55% 45%; }
+  100% { transform: translate(0, 0) scale(0.9); border-radius: 42% 58% 63% 37% / 41% 38% 62% 59%; }
 }
 
 /* ---------- Scroll progress bar ---------- */
