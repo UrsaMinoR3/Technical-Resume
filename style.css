@@ -94,11 +94,23 @@
      links, or any other component. Fixed on purpose (same reasoning
      as the hero tokens above): the effect should look the same
      regardless of light/dark theme, like a physical lamp sitting in
-     the room rather than a UI element that reflows with the page. */
-  --color-lava-1: #ff4d4d;
-  --color-lava-2: #ff8a3d;
-  --color-lava-3: #ffb347;
-  --color-lava-4: #ff3d6b;
+     the room rather than a UI element that reflows with the page.
+     Tuned as a single-hue-family ramp (ember red → red-orange →
+     orange → amber-gold, ~0°–42° on the hue wheel) matching the
+     reference photo of red wax in an orange glass shell. The
+     original set included a rose/pink (#ff3d6b, ~346°) that broke
+     the family and read as neon/candy rather than molten wax, and a
+     pale amber (#ffb347, L 68%) that washed out to near-invisible
+     when alpha-blended over the light theme's white page. Lightness
+     is kept mid-range (~50–59%) across all four stops so every blob
+     still reads as saturated color -- not a faint tint -- against
+     both the near-white and near-black page backgrounds, and the
+     whole family stays well clear of the site's blue accent so the
+     two never get confused as related UI. */
+  --color-lava-1: #e8352f;
+  --color-lava-2: #ff5f2e;
+  --color-lava-3: #ff8c1a;
+  --color-lava-4: #ffb100;
 
   /* ---- spacing (8px system; 4px is the only allowed half-step) ---- */
   --space-1: 4px;
@@ -235,19 +247,28 @@ button:focus-visible {
 /* ---------- Ambient background: lava-lamp bubbles ----------
    Pure decoration, fixed to the viewport and pinned behind every
    other element (--z-ambient sits below the whole z-index scale).
-   Six individually-sized "wax" blobs float and bob up and down like
-   a real lava lamp -- morphing between organic border-radius shapes
-   as they rise and sink, so they read as distinct, slightly wobbly
-   blobs rather than a static glow. Each blob sets its own --rise
-   (vertical travel distance) and --drift (horizontal wander) custom
-   properties; one shared keyframe animation reads both, so all six
-   stay perfectly in sync on shape/rhythm while differing in how far
-   and how fast they travel. Positioned toward the left/right edges
-   so they mostly live in the empty margins beside the centered
-   content on wide viewports; wherever real content has its own
-   opaque background (.card, the hero photo) it fully occludes this
-   layer, so it never competes with foreground contrast. Motion is
-   covered by the global prefers-reduced-motion kill switch above. */
+   Fourteen individually-sized "wax" blobs float and bob up and down
+   like a real lava lamp -- morphing between organic border-radius
+   shapes as they rise and sink, so they read as distinct, slightly
+   wobbly blobs rather than a static glow. Fourteen was chosen over
+   the original six because a handful of blobs read as sparse dots
+   rather than "a lamp full of bubbles"; going much past this starts
+   to clutter the margins and adds animated, blurred elements for
+   little extra visual payoff, since a lava lamp's effect comes from
+   varied sizes/speeds more than raw count. Each blob sets its own
+   --rise (vertical travel distance), --drift (horizontal wander),
+   and optional --lava-opacity / --lava-blur custom properties; one
+   shared keyframe animation reads --rise/--drift, so every blob
+   stays in sync on shape/rhythm while differing in how far, how
+   fast, how strong, and how soft it travels -- the opacity/blur
+   variation reads as depth (fainter, blurrier blobs sit "further
+   back" than sharper, brighter ones), which a uniform look can't
+   convey. Positioned toward the left/right edges so they mostly
+   live in the empty margins beside the centered content on wide
+   viewports; wherever real content has its own opaque background
+   (.card, the hero photo) it fully occludes this layer, so it never
+   competes with foreground contrast. Motion is covered by the
+   global prefers-reduced-motion kill switch above. */
 .ambient-bg {
   position: fixed;
   inset: 0;
@@ -257,40 +278,94 @@ button:focus-visible {
 }
 .ambient-blob {
   position: absolute;
-  filter: blur(48px);
-  opacity: 0.55;
+  filter: blur(var(--lava-blur, 48px));
+  opacity: var(--lava-opacity, 0.55);
   animation: lavaRise var(--lava-duration, 22s) ease-in-out infinite;
   animation-delay: var(--lava-delay, 0s);
 }
 .ambient-blob-1 {
-  left: 4vw; bottom: -8vh; width: 22vmin; height: 22vmin;
+  left: 2vw; top: -6vh; width: 24vmin; height: 24vmin;
   background: var(--color-lava-1);
-  --rise: -46vh; --drift: 4vw; --lava-duration: 21s; --lava-delay: 0s;
+  --rise: -48vh; --drift: 5vw; --lava-duration: 24s; --lava-delay: 0s;
+  --lava-opacity: 0.5; --lava-blur: 52px;
 }
 .ambient-blob-2 {
-  left: 13vw; bottom: 10vh; width: 13vmin; height: 13vmin;
+  left: 14vw; top: 8vh; width: 12vmin; height: 12vmin;
   background: var(--color-lava-3);
-  --rise: -30vh; --drift: -3vw; --lava-duration: 17s; --lava-delay: -5s;
+  --rise: -26vh; --drift: -3vw; --lava-duration: 16s; --lava-delay: -4s;
+  --lava-opacity: 0.6; --lava-blur: 40px;
 }
 .ambient-blob-3 {
-  right: 6vw; bottom: -10vh; width: 24vmin; height: 24vmin;
+  left: 1vw; top: 22vh; width: 18vmin; height: 18vmin;
   background: var(--color-lava-2);
-  --rise: -52vh; --drift: -5vw; --lava-duration: 26s; --lava-delay: -11s;
+  --rise: -34vh; --drift: 4vw; --lava-duration: 20s; --lava-delay: -9s;
+  --lava-opacity: 0.5; --lava-blur: 48px;
 }
 .ambient-blob-4 {
-  right: 15vw; bottom: 24vh; width: 15vmin; height: 15vmin;
+  left: 16vw; top: 38vh; width: 10vmin; height: 10vmin;
   background: var(--color-lava-4);
-  --rise: -34vh; --drift: 4vw; --lava-duration: 19s; --lava-delay: -8s;
+  --rise: -22vh; --drift: -4vw; --lava-duration: 14s; --lava-delay: -2s;
+  --lava-opacity: 0.62; --lava-blur: 38px;
 }
 .ambient-blob-5 {
-  left: 1vw; top: 52vh; width: 12vmin; height: 12vmin;
-  background: var(--color-lava-2);
-  --rise: -28vh; --drift: 3vw; --lava-duration: 23s; --lava-delay: -14s;
+  left: 3vw; top: 52vh; width: 20vmin; height: 20vmin;
+  background: var(--color-lava-1);
+  --rise: -40vh; --drift: 3vw; --lava-duration: 27s; --lava-delay: -13s;
+  --lava-opacity: 0.48; --lava-blur: 54px;
 }
 .ambient-blob-6 {
-  right: 2vw; top: 12vh; width: 17vmin; height: 17vmin;
+  left: 12vw; top: 66vh; width: 14vmin; height: 14vmin;
+  background: var(--color-lava-3);
+  --rise: -30vh; --drift: -5vw; --lava-duration: 18s; --lava-delay: -6s;
+  --lava-opacity: 0.58; --lava-blur: 42px;
+}
+.ambient-blob-7 {
+  left: 5vw; top: 82vh; width: 16vmin; height: 16vmin;
+  background: var(--color-lava-2);
+  --rise: -36vh; --drift: 4vw; --lava-duration: 23s; --lava-delay: -17s;
+  --lava-opacity: 0.52; --lava-blur: 46px;
+}
+.ambient-blob-8 {
+  right: 3vw; top: -8vh; width: 22vmin; height: 22vmin;
+  background: var(--color-lava-4);
+  --rise: -46vh; --drift: -4vw; --lava-duration: 25s; --lava-delay: -3s;
+  --lava-opacity: 0.5; --lava-blur: 52px;
+}
+.ambient-blob-9 {
+  right: 15vw; top: 6vh; width: 11vmin; height: 11vmin;
   background: var(--color-lava-1);
-  --rise: -38vh; --drift: -4vw; --lava-duration: 29s; --lava-delay: -3s;
+  --rise: -24vh; --drift: 3vw; --lava-duration: 15s; --lava-delay: -10s;
+  --lava-opacity: 0.6; --lava-blur: 38px;
+}
+.ambient-blob-10 {
+  right: 2vw; top: 20vh; width: 26vmin; height: 26vmin;
+  background: var(--color-lava-3);
+  --rise: -50vh; --drift: -3vw; --lava-duration: 30s; --lava-delay: -19s;
+  --lava-opacity: 0.45; --lava-blur: 56px;
+}
+.ambient-blob-11 {
+  right: 17vw; top: 36vh; width: 13vmin; height: 13vmin;
+  background: var(--color-lava-2);
+  --rise: -28vh; --drift: 5vw; --lava-duration: 17s; --lava-delay: -1s;
+  --lava-opacity: 0.58; --lava-blur: 40px;
+}
+.ambient-blob-12 {
+  right: 4vw; top: 50vh; width: 19vmin; height: 19vmin;
+  background: var(--color-lava-1);
+  --rise: -38vh; --drift: -4vw; --lava-duration: 22s; --lava-delay: -14s;
+  --lava-opacity: 0.5; --lava-blur: 50px;
+}
+.ambient-blob-13 {
+  right: 13vw; top: 64vh; width: 15vmin; height: 15vmin;
+  background: var(--color-lava-4);
+  --rise: -32vh; --drift: 3vw; --lava-duration: 19s; --lava-delay: -7s;
+  --lava-opacity: 0.56; --lava-blur: 44px;
+}
+.ambient-blob-14 {
+  right: 1vw; top: 80vh; width: 21vmin; height: 21vmin;
+  background: var(--color-lava-2);
+  --rise: -44vh; --drift: -5vw; --lava-duration: 28s; --lava-delay: -21s;
+  --lava-opacity: 0.48; --lava-blur: 50px;
 }
 @keyframes lavaRise {
   0%   { transform: translate(0, 0) scale(0.9); border-radius: 42% 58% 63% 37% / 41% 38% 62% 59%; }
