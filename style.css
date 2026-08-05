@@ -109,7 +109,7 @@ body {
   overflow: hidden;
   background: linear-gradient(135deg, var(--navy) 0%, var(--navy-deep) 100%);
   color: #fff;
-  padding: 90px 0 70px;
+  padding: 90px 0 110px;
   text-align: center;
   /* min(), not a bare vh — mobile browsers resize the visible viewport as the
      address bar collapses/expands, which can otherwise leave dead space or
@@ -118,24 +118,47 @@ body {
   min-height: min(60vh, 480px);
   display: flex;
   align-items: center;
+  /* diagonal bottom edge instead of a hard rectangle cut into the page below */
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 92%);
 }
 
 @media (max-width: 480px) {
-  .hero { min-height: auto; padding: 64px 0 48px; }
+  .hero { min-height: auto; padding: 64px 0 90px; }
 }
 
 .hero-bg { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
 
 .blob {
   position: absolute;
-  border-radius: 50%;
+  /* irregular, hand-drawn-feeling blob shapes instead of perfect circles —
+     the classic "AI gradient orb" look is exactly what a plain 50% radius gives */
   filter: blur(60px);
   opacity: 0.35;
   will-change: transform;
+  animation: blobMorph 14s ease-in-out infinite;
 }
-.blob-a { width: 380px; height: 380px; background: var(--teal); top: -120px; left: -80px; }
-.blob-b { width: 320px; height: 320px; background: var(--violet); bottom: -140px; right: -60px; }
-.blob-c { width: 240px; height: 240px; background: #ffffff; top: 40%; left: 60%; opacity: 0.08; }
+.blob-a {
+  width: 380px; height: 400px; background: var(--teal);
+  top: -120px; left: -80px;
+  border-radius: 42% 58% 65% 35% / 45% 40% 60% 55%;
+}
+.blob-b {
+  width: 320px; height: 300px; background: var(--violet);
+  bottom: -140px; right: -60px;
+  border-radius: 60% 40% 35% 65% / 55% 65% 35% 45%;
+  animation-delay: -5s;
+}
+.blob-c {
+  width: 240px; height: 260px; background: #ffffff;
+  top: 40%; left: 60%; opacity: 0.08;
+  border-radius: 55% 45% 40% 60% / 40% 55% 45% 60%;
+  animation-delay: -9s;
+}
+@keyframes blobMorph {
+  0%, 100% { border-radius: 42% 58% 65% 35% / 45% 40% 60% 55%; }
+  33%      { border-radius: 60% 40% 35% 65% / 55% 65% 35% 45%; }
+  66%      { border-radius: 48% 52% 55% 45% / 40% 50% 50% 60%; }
+}
 
 .float-icon {
   position: absolute;
@@ -214,8 +237,35 @@ body {
   100% { opacity: 0; }
 }
 
+/* ---------- Asymmetric content layout ---------- */
+/* Wider shell than the hero's centered .wrap, and gridless in spirit — a
+   sticky icon-rich skills rail alongside a wider reading column, instead of
+   one narrow centered stack of cards (the classic "AI template" tell). */
+.content-shell {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 8px 24px 70px;
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 880px) {
+  .content-shell {
+    grid-template-columns: 300px minmax(0, 1fr);
+    align-items: start;
+    gap: 28px;
+  }
+  .sidebar { position: sticky; top: 76px; }
+}
+
+.sidebar-card { margin-bottom: 0; }
+
+.main-col { display: flex; flex-direction: column; gap: 20px; }
+.main-col .card { margin-bottom: 0; }
+
 /* ---------- Scroll-reveal sections ---------- */
-main.wrap { padding-top: 32px; padding-bottom: 60px; }
 
 /* Content is visible by default — the fade/slide-in only ever activates once
    JS has confirmed (via .js-reveal on <html>) that it can reliably reverse it.
@@ -258,31 +308,40 @@ html.js-reveal .reveal.in-view {
 }
 .card p { color: var(--text-secondary); font-size: 15px; white-space: pre-line; }
 
-/* ---------- Skills ---------- */
-.skill-groups { display: flex; flex-direction: column; gap: 16px; }
+/* ---------- Skills (icon rows, sidebar) ---------- */
+.skill-group { margin-bottom: 22px; }
+.skill-group:last-child { margin-bottom: 0; }
 .skill-group h3 {
-  font-size: 13.5px;
+  font-size: 12.5px;
   font-weight: 700;
   color: var(--text-primary);
   margin-bottom: 8px;
 }
-.tags { display: flex; flex-wrap: wrap; gap: 8px; }
-.tag {
-  background: var(--tag-bg);
-  color: var(--tag-text);
-  font-size: 12.5px;
-  font-weight: 600;
-  padding: 5px 12px;
-  border-radius: 999px;
+.icon-list { display: flex; flex-direction: column; gap: 3px; }
+.icon-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  padding: 6px 8px;
+  border-radius: 8px;
   cursor: default;
-  transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease;
+  /* background tint on hover, not a text-color swap — keeps contrast safe
+     in both themes without needing a special-cased fixed hover color */
+  transition: background 0.15s ease, transform 0.15s ease, color 0.15s ease;
 }
-.tag:hover {
-  transform: translateY(-2px) scale(1.05);
-  background: var(--teal);
-  /* dark, fixed-contrast text — var(--teal) is a bright/light cyan in dark
-     mode, so white text on it was low-contrast and hard to read */
-  color: var(--navy-deep);
+.icon-item:hover {
+  background: var(--tag-bg);
+  color: var(--text-primary);
+  transform: translateX(3px);
+}
+.icon-item .icon {
+  font-size: 16px;
+  width: 22px;
+  text-align: center;
+  flex-shrink: 0;
 }
 
 /* ---------- Experience timeline ---------- */
@@ -391,8 +450,3 @@ footer {
 footer a { color: var(--teal); text-decoration: none; }
 footer a:hover { text-decoration: underline; }
 
-/* ---------- Responsive ---------- */
-@media (min-width: 640px) {
-  .skill-groups { flex-direction: row; flex-wrap: wrap; }
-  .skill-group { flex: 1 1 220px; }
-}
