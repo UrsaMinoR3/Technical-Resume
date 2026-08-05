@@ -126,6 +126,7 @@
   --space-11: 96px;
 
   /* ---- radius ---- */
+  --radius-xs: 2px; /* hairline rounding for very small elements (flag icons) where --radius-sm reads as pill-shaped */
   --radius-sm: 6px;
   --radius-md: 12px;
   --radius-full: 999px;
@@ -138,6 +139,8 @@
   --size-icon-sm: 14px;
   --size-icon-md: 18px;
   --size-logo: 36px;
+  --size-flag-w: 20px;
+  --size-flag-h: 14px;
 
   /* ---- typography (2 families max, 5 sizes max, 3 weights max) ---- */
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -588,7 +591,14 @@ html.js-reveal .reveal.in-view { opacity: 1; transform: translateY(0); }
 .job-head h3 { font-size: var(--text-base); font-weight: var(--weight-bold); }
 .job-date { font-size: var(--text-xs); color: var(--color-text-muted); font-weight: var(--weight-bold); white-space: nowrap; }
 .job-company { font-size: var(--text-sm); font-weight: var(--weight-bold); color: var(--color-accent); margin-top: var(--space-1); }
-.job-location { font-size: var(--text-xs); color: var(--color-text-muted); margin: var(--space-1) 0 var(--space-2); }
+.job-location {
+  display: flex; align-items: center; gap: var(--space-2);
+  font-size: var(--text-xs); color: var(--color-text-muted); margin: var(--space-1) 0 var(--space-2);
+}
+.flag-icon {
+  width: var(--size-flag-w); height: var(--size-flag-h); flex-shrink: 0;
+  object-fit: cover; border-radius: var(--radius-xs); border: 1px solid var(--color-border);
+}
 .job-card p { font-size: var(--text-sm); color: var(--color-text-secondary); margin: var(--space-1) 0 var(--space-3); }
 
 .factors-btn {
