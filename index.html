@@ -27,6 +27,10 @@
       <a href="tel:+573054136533">📞 +57 305 413 6533</a>
       <a href="mailto:davidpedraza41@gmail.com">✉️ davidpedraza41@gmail.com</a>
     </div>
+    <div class="hero-links reveal-in" style="--rd:0.3s">
+      <a class="hero-btn" href="https://github.com/UrsaMinoR3" target="_blank" rel="noopener">🐙 GitHub</a>
+      <a class="hero-btn" href="https://www.linkedin.com/in/david-hernandez-186559141/" target="_blank" rel="noopener">💼 LinkedIn</a>
+    </div>
     <div class="scroll-cue" aria-hidden="true"><span></span></div>
   </div>
 </header>
@@ -111,161 +115,182 @@ problem solving, and cross functional collaboration in dynamic environments.</p>
 
   <section class="card reveal" id="experience">
     <h2>Work Experience</h2>
-    <p class="section-note">Hover a card (or tap on mobile) to slide up its Success Factors. The timeline grows stronger toward today.</p>
+    <p class="section-note">Click "Success Factors" on any card to open its panel on the other side. The timeline grows stronger toward today.</p>
 
     <div class="zigzag">
-      <div class="zz-line" aria-hidden="true"></div>
+      <svg class="zz-svg" viewBox="0 0 40 1000" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="zzGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" style="stop-color: var(--g1)" />
+            <stop offset="35%" style="stop-color: var(--g2)" />
+            <stop offset="65%" style="stop-color: var(--g3)" />
+            <stop offset="100%" style="stop-color: var(--g4)" />
+          </linearGradient>
+        </defs>
+        <path d="M20,0 C33,90 7,160 20,250 C33,340 7,410 20,500 C33,590 7,660 20,750 C31,820 9,880 20,950 C25,975 18,990 20,1000"
+              stroke="url(#zzGrad)" stroke-width="3.5" fill="none" stroke-linecap="round" />
+      </svg>
 
       <!-- Chronological ascending: weakest (earliest) to strongest (most recent) -->
 
       <div class="zz-item zz-left" style="--strength: 0.15">
-        <span class="zz-dot"></span>
-        <div class="flip-card">
-          <div class="flip-inner">
-            <div class="flip-front">
-              <div class="job-head">
-                <h3>Jr RPA Developer</h3>
-                <span class="job-date">Jan 2019 – Feb 2022</span>
-              </div>
-              <div class="job-company">Teleperformance</div>
-              <div class="job-location">🇨🇴 Remote - Colombia</div>
-              <p>Developed bot using Automation Anywhere v11 and 360, UI Path, integrating both
+        <div class="zz-row">
+          <div class="zz-col zz-col-a">
+          <div class="job-card">
+            <div class="job-head">
+              <h3>Jr RPA Developer</h3>
+              <span class="job-date">Jan 2019 – Feb 2022</span>
+            </div>
+            <div class="job-company">Teleperformance</div>
+            <div class="job-location">🇨🇴 Remote - Colombia</div>
+            <p>Developed bot using Automation Anywhere v11 and 360, UI Path, integrating both
 platforms with multiple CRMS, SQL, API, Error handling and SMTP for email integrations
 and notifications.</p>
-              <span class="flip-hint">▲ hover / tap to reveal Success Factors</span>
-            </div>
-            <div class="flip-back">
-              <span class="factors-label">Success Factors</span>
-              <ul>
-                <li>Bot development</li>
-                <li>Documentation</li>
-                <li>Integration with multiple platforms for automation</li>
-                <li>Dashboard integrations with PBI</li>
-              </ul>
-            </div>
+            <button class="factors-btn" type="button" aria-expanded="false">🔍 Success Factors</button>
+          </div>
+          </div>
+          <div class="zz-connector"><span class="zz-dot"></span></div>
+          <div class="zz-col zz-col-b">
+          <div class="factors-card">
+            <span class="factors-label">Success Factors</span>
+            <ul>
+              <li>Bot development</li>
+              <li>Documentation</li>
+              <li>Integration with multiple platforms for automation</li>
+              <li>Dashboard integrations with PBI</li>
+            </ul>
+          </div>
           </div>
         </div>
       </div>
 
       <div class="zz-item zz-right" style="--strength: 0.35">
-        <span class="zz-dot"></span>
-        <div class="flip-card">
-          <div class="flip-inner">
-            <div class="flip-front">
-              <div class="job-head">
-                <h3>Senior Developer</h3>
-                <span class="job-date">June 2022 – Nov 2022</span>
-              </div>
-              <div class="job-company">Deloitte</div>
-              <div class="job-location">🇦🇷 On site - Argentina</div>
-              <p>Worked as a senior developer of Unqork, most of this work was based coding on HTML,
+        <div class="zz-row">
+          <div class="zz-col zz-col-a">
+          <div class="factors-card">
+            <span class="factors-label">Success Factors</span>
+            <ul>
+              <li>Leadership on Development</li>
+              <li>Team management</li>
+              <li>Client Management</li>
+              <li>Dashboard and metrics integrationson PBI</li>
+              <li>Development on HTML and CSS</li>
+              <li>Design and QA on Figma</li>
+            </ul>
+          </div>
+          </div>
+          <div class="zz-connector"><span class="zz-dot"></span></div>
+          <div class="zz-col zz-col-b">
+          <div class="job-card">
+            <div class="job-head">
+              <h3>Senior Developer</h3>
+              <span class="job-date">June 2022 – Nov 2022</span>
+            </div>
+            <div class="job-company">Deloitte</div>
+            <div class="job-location">🇦🇷 On site - Argentina</div>
+            <p>Worked as a senior developer of Unqork, most of this work was based coding on HTML,
 CSS and Javascript. On my additional roles i was working with site revisions, mock-up redesigns, Team management, client management and quality control of the team
 development.</p>
-              <span class="flip-hint">▲ hover / tap to reveal Success Factors</span>
-            </div>
-            <div class="flip-back">
-              <span class="factors-label">Success Factors</span>
-              <ul>
-                <li>Leadership on Development</li>
-                <li>Team management</li>
-                <li>Client Management</li>
-                <li>Dashboard and metrics integrationson PBI</li>
-                <li>Development on HTML and CSS</li>
-                <li>Design and QA on Figma</li>
-              </ul>
-            </div>
+            <button class="factors-btn" type="button" aria-expanded="false">🔍 Success Factors</button>
+          </div>
           </div>
         </div>
       </div>
 
       <div class="zz-item zz-left" style="--strength: 0.55">
-        <span class="zz-dot"></span>
-        <div class="flip-card">
-          <div class="flip-inner">
-            <div class="flip-front">
-              <div class="job-head">
-                <h3>RPA Analyst</h3>
-                <span class="job-date">Dec 2022 – Sept 2024</span>
-              </div>
-              <div class="job-company">NTT DATA</div>
-              <div class="job-location">🇨🇴 Remote - Colombia</div>
-              <p>Developed bots with integrations across databases, Excel, email, browsers, and APIs
+        <div class="zz-row">
+          <div class="zz-col zz-col-a">
+          <div class="job-card">
+            <div class="job-head">
+              <h3>RPA Analyst</h3>
+              <span class="job-date">Dec 2022 – Sept 2024</span>
+            </div>
+            <div class="job-company">NTT DATA</div>
+            <div class="job-location">🇨🇴 Remote - Colombia</div>
+            <p>Developed bots with integrations across databases, Excel, email, browsers, and APIs
 using Automation Anywhere 360, Bizagi and UI Path. Created reusable bot structures to
 support multiple business processes efficiently and performed maintenance activities for
 bots in production.</p>
-              <span class="flip-hint">▲ hover / tap to reveal Success Factors</span>
-            </div>
-            <div class="flip-back">
-              <span class="factors-label">Success Factors</span>
-              <ul>
-                <li>Framework Integration</li>
-                <li>Bot development with reusable capabilities</li>
-                <li>Dashboards for metrics and meetings with stakeholders on PBI</li>
-                <li>Client Management</li>
-              </ul>
-            </div>
+            <button class="factors-btn" type="button" aria-expanded="false">🔍 Success Factors</button>
+          </div>
+          </div>
+          <div class="zz-connector"><span class="zz-dot"></span></div>
+          <div class="zz-col zz-col-b">
+          <div class="factors-card">
+            <span class="factors-label">Success Factors</span>
+            <ul>
+              <li>Framework Integration</li>
+              <li>Bot development with reusable capabilities</li>
+              <li>Dashboards for metrics and meetings with stakeholders on PBI</li>
+              <li>Client Management</li>
+            </ul>
+          </div>
           </div>
         </div>
       </div>
 
       <div class="zz-item zz-right" style="--strength: 0.78">
-        <span class="zz-dot"></span>
-        <div class="flip-card">
-          <div class="flip-inner">
-            <div class="flip-front">
-              <div class="job-head">
-                <h3>Automation Expert</h3>
-                <span class="job-date">Nov 2024 – June 2025</span>
-              </div>
-              <div class="job-company">Automation Anywhere</div>
-              <div class="job-location">🇺🇸 Remote Freelance - US</div>
-              <p>Created bots with database, excel, email, browser and API integrations in Automation
+        <div class="zz-row">
+          <div class="zz-col zz-col-a">
+          <div class="factors-card">
+            <span class="factors-label">Success Factors</span>
+            <ul>
+              <li>Framework Integration</li>
+              <li>Bot development with reusable capabilities</li>
+              <li>API and JSON management to send information for reusable bots</li>
+              <li>Client Management</li>
+            </ul>
+          </div>
+          </div>
+          <div class="zz-connector"><span class="zz-dot"></span></div>
+          <div class="zz-col zz-col-b">
+          <div class="job-card">
+            <div class="job-head">
+              <h3>Automation Expert</h3>
+              <span class="job-date">Nov 2024 – June 2025</span>
+            </div>
+            <div class="job-company">Automation Anywhere</div>
+            <div class="job-location">🇺🇸 Remote Freelance - US</div>
+            <p>Created bots with database, excel, email, browser and API integrations in Automation
 Anywhere 360, worked reusable structures to enhance the bot creation and decrease the
 development time to send bots to send bots to production. Worked with framework
 integrations.</p>
-              <span class="flip-hint">▲ hover / tap to reveal Success Factors</span>
-            </div>
-            <div class="flip-back">
-              <span class="factors-label">Success Factors</span>
-              <ul>
-                <li>Framework Integration</li>
-                <li>Bot development with reusable capabilities</li>
-                <li>API and JSON management to send information for reusable bots</li>
-                <li>Client Management</li>
-              </ul>
-            </div>
+            <button class="factors-btn" type="button" aria-expanded="false">🔍 Success Factors</button>
+          </div>
           </div>
         </div>
       </div>
 
       <div class="zz-item zz-left zz-strongest" style="--strength: 1">
-        <span class="zz-dot"></span>
-        <div class="flip-card">
-          <div class="flip-inner">
-            <div class="flip-front">
-              <div class="job-head">
-                <h3>Business Automation Expert</h3>
-                <span class="job-date">Jul 2025 – July2026</span>
-              </div>
-              <div class="job-company">Spreetail</div>
-              <div class="job-location">🇺🇸 Remote Freelance - US</div>
-              <p>Created bots with database, excel, email, browser and API integrations in Power
+        <div class="zz-row">
+          <div class="zz-col zz-col-a">
+          <div class="job-card">
+            <div class="job-head">
+              <h3>Business Automation Expert</h3>
+              <span class="job-date">Jul 2025 – July2026</span>
+            </div>
+            <div class="job-company">Spreetail</div>
+            <div class="job-location">🇺🇸 Remote Freelance - US</div>
+            <p>Created bots with database, excel, email, browser and API integrations in Power
 Automate. Created AI Integrations with Cursor and Claude to keep myself accountable
 with my support and enhancement activities for bots and processes in production.</p>
-              <span class="flip-hint">▲ hover / tap to reveal Success Factors</span>
-            </div>
-            <div class="flip-back">
-              <span class="factors-label">Success Factors</span>
-              <ul>
-                <li>Leadership on Production Support</li>
-                <li>Creation of a Ticketing System</li>
-                <li>Bot development with AI Integration on Power Automate</li>
-                <li>Architecture for Framework on Power Automate</li>
-                <li>RPA analisys and documentation for bot development</li>
-                <li>Client Management</li>
-                <li>Dashboard and Metrics on PBI</li>
-              </ul>
-            </div>
+            <button class="factors-btn" type="button" aria-expanded="false">🔍 Success Factors</button>
+          </div>
+          </div>
+          <div class="zz-connector"><span class="zz-dot"></span></div>
+          <div class="zz-col zz-col-b">
+          <div class="factors-card">
+            <span class="factors-label">Success Factors</span>
+            <ul>
+              <li>Leadership on Production Support</li>
+              <li>Creation of a Ticketing System</li>
+              <li>Bot development with AI Integration on Power Automate</li>
+              <li>Architecture for Framework on Power Automate</li>
+              <li>RPA analisys and documentation for bot development</li>
+              <li>Client Management</li>
+              <li>Dashboard and Metrics on PBI</li>
+            </ul>
+          </div>
           </div>
         </div>
       </div>

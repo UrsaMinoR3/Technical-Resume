@@ -92,15 +92,32 @@ body {
 .mascot {
   position: fixed;
   top: 0; left: 0;
-  width: 56px;
+  width: 64px;
+  height: 64px;
   z-index: 40;
   pointer-events: none;
   opacity: 0;
-  transform: translate(-1000px, -1000px) scale(0.9);
-  transition: transform 0.45s cubic-bezier(.34,1.56,.64,1), opacity 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* a soft backdrop so a light-colored cat pose stays legible over both
+     the dark hero photo and the page background, instead of blending in */
+  background: radial-gradient(circle, color-mix(in srgb, var(--card-bg) 75%, transparent) 0%, transparent 72%);
+  transform: translate(-1000px, -1000px);
+  transition: transform 0.75s cubic-bezier(.4, 0, .2, 1), opacity 0.3s ease;
 }
 .mascot.is-visible { opacity: 1; }
-.mascot img { width: 100%; height: auto; display: block; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.25)); }
+.mascot img {
+  /* fixed box + contain — the 25 source poses all crop to different
+     aspect ratios, so a bare width:100%/height:auto let some look
+     stretched or oddly proportioned next to each other */
+  max-width: 52px;
+  max-height: 52px;
+  width: auto;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 3px 6px rgba(0,0,0,0.35));
+}
 .mascot.is-flipped img { transform: scaleX(-1); }
 
 /* ---------- Hero (real photo parallax) ---------- */
@@ -142,6 +159,20 @@ body {
 .hero .contact { margin-top: 20px; display: flex; justify-content: center; gap: 22px; flex-wrap: wrap; font-size: 14.5px; }
 .hero .contact a { color: rgba(255,255,255,0.88); text-decoration: none; }
 .hero .contact a:hover { color: #fff; text-decoration: underline; }
+
+.hero-links { margin-top: 18px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+.hero-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 13.5px; font-weight: 700; color: #fff;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.28);
+  border-radius: 999px;
+  padding: 8px 18px;
+  text-decoration: none;
+  backdrop-filter: blur(6px);
+  transition: background 0.15s ease, transform 0.15s ease, border-color 0.15s ease;
+}
+.hero-btn:hover { background: var(--accent); border-color: var(--accent); transform: translateY(-2px); }
 
 .reveal-in { opacity: 0; transform: translateY(16px); animation: revealIn 0.7s ease forwards; animation-delay: var(--rd, 0s); }
 @keyframes revealIn { to { opacity: 1; transform: translateY(0); } }
@@ -205,33 +236,28 @@ html.js-reveal .reveal.in-view { opacity: 1; transform: translateY(0); }
 .icon-item .icon { font-size: 14px; }
 
 /* ============================================================
-   Zigzag experience timeline — alternating sides, connected by a
-   center line that gains strength (GitHub-green intensity) as it
-   moves from the earliest role to the most recent.
+   Zigzag experience timeline — each row is a 3-column grid (job
+   card | dot | Success Factors card), alternating which side the
+   job card sits on. A wavy SVG path — not a straight line — runs
+   behind everything, growing from faint to full GitHub-green as it
+   nears the present.
    ============================================================ */
 .zigzag { position: relative; padding: 10px 0; }
-.zz-line {
-  position: absolute;
-  left: 50%; top: 0; bottom: 0; width: 3px;
-  transform: translateX(-50%);
-  background: linear-gradient(to bottom, var(--g1), var(--g2) 35%, var(--g3) 65%, var(--g4));
-  border-radius: 3px;
-}
-@media (max-width: 720px) {
-  .zz-line { left: 18px; }
-}
 
-.zz-item {
-  position: relative;
-  width: 46%;
-  margin-bottom: 34px;
+.zz-svg { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; }
+
+.zz-item { position: relative; z-index: 1; margin-bottom: 26px; }
+.zz-item:last-child { margin-bottom: 0; }
+
+.zz-row {
+  display: grid;
+  grid-template-columns: 1fr 40px 1fr;
+  align-items: start;
 }
-.zz-item.zz-left { margin-right: 54%; text-align: right; }
-.zz-item.zz-right { margin-left: 54%; text-align: left; }
+.zz-col { min-width: 0; }
+.zz-connector { display: flex; justify-content: center; padding-top: 24px; }
 
 .zz-dot {
-  position: absolute;
-  top: 24px;
   width: 16px; height: 16px;
   border-radius: 50%;
   /* plain fallback first — browsers without color-mix() just keep this
@@ -241,60 +267,68 @@ html.js-reveal .reveal.in-view { opacity: 1; transform: translateY(0); }
   box-shadow: 0 0 0 4px var(--page-bg);
   box-shadow: 0 0 0 4px var(--page-bg), 0 0 calc(4px + 10px * var(--strength)) color-mix(in srgb, var(--g4) calc(var(--strength) * 80%), transparent);
 }
-.zz-item.zz-left .zz-dot { right: -8px; transform: translateX(50%); }
-.zz-item.zz-right .zz-dot { left: -8px; transform: translateX(-50%); }
+
+.zz-item.zz-strongest .job-card { box-shadow: 0 0 0 2px var(--g4), var(--shadow); }
 
 @media (max-width: 720px) {
-  .zigzag { padding-left: 40px; }
-  .zz-item, .zz-item.zz-left, .zz-item.zz-right {
-    width: 100%; margin-left: 0; margin-right: 0; text-align: left;
-  }
-  .zz-item.zz-left .zz-dot, .zz-item.zz-right .zz-dot { left: -40px; right: auto; transform: translateX(-50%); top: 24px; }
+  .zz-row { grid-template-columns: 1fr; }
+  .zz-connector { display: none; }
+  .zz-svg { display: none; }
 }
 
-.zz-item.zz-strongest .flip-card { box-shadow: 0 0 0 2px var(--g4), var(--shadow); }
-
-/* ---------- Experience card: "gum pack" sliding drawer ----------
-   The Success Factors panel sits directly behind the front card and
-   slides UP to cover it on hover/tap, then slides back down out of
-   sight — like sliding a stick of gum out of its sleeve and back in,
-   rather than a 3D flip. */
-.flip-card { position: relative; min-height: 330px; border-radius: 12px; overflow: hidden; }
-.flip-inner { position: relative; width: 100%; height: 100%; min-height: 330px; }
-
-.flip-front, .flip-back {
-  position: absolute; inset: 0;
+/* ---------- Job card + Success Factors card ---------- */
+.job-card, .factors-card {
   background: var(--card-bg);
   border: 1px solid var(--border);
   border-radius: 12px;
   box-shadow: var(--shadow);
   padding: 18px 20px;
-  overflow-y: auto;
   text-align: left;
-  cursor: pointer;
-  transition: transform 0.45s cubic-bezier(.4, 0, .2, 1);
 }
-.flip-front { z-index: 1; transform: translateY(0); }
-.flip-back {
-  z-index: 2;
-  background: var(--subtle-bg);
-  transform: translateY(100%);
-}
-.flip-card:hover .flip-back,
-.flip-card.is-flipped .flip-back { transform: translateY(0); }
 
 .job-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 6px; }
 .job-head h3 { font-size: 15.5px; font-weight: 700; }
 .job-date { font-size: 12px; color: var(--text-muted); font-weight: 600; white-space: nowrap; }
 .job-company { font-size: 13px; font-weight: 700; color: var(--accent); margin-top: 2px; }
 .job-location { font-size: 11.5px; color: var(--text-muted); margin: 2px 0 8px; }
-.flip-front p { font-size: 13.5px; color: var(--text-secondary); margin: 4px 0 10px; }
-.flip-hint { display: block; font-size: 10.5px; color: var(--text-muted); font-style: italic; }
+.job-card p { font-size: 13.5px; color: var(--text-secondary); margin: 4px 0 12px; }
+
+.factors-btn {
+  font: inherit; font-size: 12.5px; font-weight: 700;
+  color: var(--accent); background: var(--accent-soft);
+  border: 1px solid var(--accent); border-radius: 999px;
+  padding: 6px 14px; cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+.factors-btn:hover { background: var(--accent); color: #fff; transform: translateY(-1px); }
+.zz-item.factors-open .factors-btn { background: var(--accent); color: #fff; }
+
+/* Success Factors card — starts collapsed, the button opens/closes it
+   on the OTHER side of the row, so that side isn't empty once open. */
+.factors-card {
+  background: var(--subtle-bg);
+  opacity: 0;
+  max-height: 0;
+  padding-top: 0; padding-bottom: 0;
+  overflow: hidden;
+  transform: scale(0.96);
+  transition: opacity 0.35s ease, transform 0.35s ease, max-height 0.35s ease, padding 0.35s ease;
+}
+.zz-item.factors-open .factors-card {
+  opacity: 1;
+  max-height: 600px;
+  padding-top: 18px; padding-bottom: 18px;
+  transform: scale(1);
+}
+@media (max-width: 720px) {
+  .factors-card { margin-top: 0; }
+  .zz-item.factors-open .factors-card { margin-top: 14px; }
+}
 
 .factors-label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); margin-bottom: 8px; }
-.flip-back ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
-.flip-back li { font-size: 12.5px; color: var(--text-secondary); padding-left: 16px; position: relative; }
-.flip-back li::before { content: "✓"; position: absolute; left: 0; color: var(--g4); font-weight: 700; }
+.factors-card ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.factors-card li { font-size: 12.5px; color: var(--text-secondary); padding-left: 16px; position: relative; }
+.factors-card li::before { content: "✓"; position: absolute; left: 0; color: var(--g4); font-weight: 700; }
 
 /* ---------- Education ---------- */
 .edu-grid { display: flex; flex-direction: column; gap: 20px; }

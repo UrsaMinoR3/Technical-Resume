@@ -76,10 +76,16 @@
     }
   } catch (e) { /* CSS default already has .reveal visible */ }
 
-  /* ---------- Success-factor drawers: tap-to-open for touch (hover already works via CSS) ---------- */
+  /* ---------- Success Factors: button opens/closes the card on the other side ---------- */
   try {
-    document.querySelectorAll(".flip-card").forEach((card) => {
-      card.addEventListener("click", () => card.classList.toggle("is-flipped"));
+    document.querySelectorAll(".factors-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const item = btn.closest(".zz-item");
+        if (!item) return;
+        const open = item.classList.toggle("factors-open");
+        btn.setAttribute("aria-expanded", open ? "true" : "false");
+        btn.textContent = open ? "✕ Close" : "🔍 Success Factors";
+      });
     });
   } catch (e) { /* non-critical */ }
 
@@ -103,7 +109,7 @@
       const mascotImg = document.getElementById("mascot-img");
       const FRAME_DIR = "img/cat-frames/";
       const FRAMES = ["cat-05", "cat-13", "cat-17", "cat-00", "cat-01", "cat-04", "cat-16", "cat-20", "cat-07", "cat-19"];
-      const TARGET_SELECTOR = ".card, .icon-item, .flip-card, #theme-toggle, .profile-photo";
+      const TARGET_SELECTOR = ".card, .icon-item, .job-card, .factors-btn, #theme-toggle, .profile-photo, .hero-btn";
       const WANDER_INTERVAL_MS = 3200;
 
       let currentTarget = null; // actively hovered element, if any
@@ -120,7 +126,7 @@
 
       function positionAt(el) {
         const rect = el.getBoundingClientRect();
-        const mascotSize = 56;
+        const mascotSize = 64;
         const margin = 8;
         let left, useLeftCorner;
 
