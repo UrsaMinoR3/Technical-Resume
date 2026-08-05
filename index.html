@@ -10,32 +10,45 @@
 </head>
 <body>
 
+<div class="progress-bar" id="progress-bar"></div>
 <button id="theme-toggle" aria-label="Toggle dark/light theme" title="Toggle theme">🌓</button>
 
 <header class="hero">
-  <div class="wrap">
-    <h1>David Hernandez</h1>
-    <p class="title">RPA &amp; AI Developer</p>
-    <div class="contact">
+  <div class="hero-bg" aria-hidden="true">
+    <span class="blob blob-a"></span>
+    <span class="blob blob-b"></span>
+    <span class="blob blob-c"></span>
+    <span class="float-icon" style="--x:8%;  --delay:0s;  --dur:16s;">🤖</span>
+    <span class="float-icon" style="--x:22%; --delay:2s;  --dur:20s;">⚙️</span>
+    <span class="float-icon" style="--x:78%; --delay:1s;  --dur:18s;">🔧</span>
+    <span class="float-icon" style="--x:90%; --delay:4s;  --dur:22s;">💻</span>
+    <span class="float-icon" style="--x:55%; --delay:3s;  --dur:19s;">🧠</span>
+    <span class="float-icon" style="--x:38%; --delay:5s;  --dur:24s;">🔗</span>
+  </div>
+  <div class="wrap hero-content" id="parallax-content">
+    <h1 class="reveal-in">David Hernandez</h1>
+    <p class="title reveal-in" style="--rd:0.1s">RPA &amp; AI Developer</p>
+    <div class="contact reveal-in" style="--rd:0.2s">
       <a href="tel:+573054136533">📞 +57 305 413 6533</a>
       <a href="mailto:davidpedraza41@gmail.com">✉️ davidpedraza41@gmail.com</a>
     </div>
+    <div class="scroll-cue" aria-hidden="true"><span></span></div>
   </div>
 </header>
 
 <main class="wrap">
 
-  <section class="card" id="about">
+  <section class="card reveal" id="about">
     <h2>About Me</h2>
-    <p>Automation and software professional with 6+ years of experience building and supporting business process automations, RPA solutions, and web systems. Skilled in developing bots and workflow automations with integrations across databases, Excel, email, browsers, and APIs. Hands-on experience with Automation Anywhere 360, Power Automate, Python, SQL, JavaScript, HTML, and CSS. Known for adaptability, fast learning, problem solving, and cross-functional collaboration in dynamic environments.</p>
+    <p>Automation and software professional with 6+ years of experience building and
+supporting business process automations, RPA solutions and web systems. Skilled in
+developing bots and workflow automations with integrations across databases, Excel,
+email, browsers, and APIs. Hands on experience with Automation Anywhere 360, Power
+Automate, Python, SQL, JavaScript, HTML, and CSS. Known for adaptability, fast learning,
+problem solving, and cross functional collaboration in dynamic environments.</p>
   </section>
 
-  <section class="card" id="success">
-    <h2>Success Factors</h2>
-    <p>Across every role, I've adapted quickly to whatever automation platform or tool a company needed to reach a specific goal — from Automation Anywhere to Power Automate to UI Path. Along the way I picked up additional low-code platforms and consistently adjusted to each company's own internal methodology and work environment.</p>
-  </section>
-
-  <section class="card" id="skills">
+  <section class="card reveal" id="skills">
     <h2>Technical Skills</h2>
     <div class="skill-groups">
       <div class="skill-group">
@@ -44,9 +57,7 @@
           <span class="tag">Automation Anywhere 360</span>
           <span class="tag">Power Automate</span>
           <span class="tag">UI Path</span>
-          <span class="tag">Workflow Automation</span>
-          <span class="tag">Bot Support</span>
-          <span class="tag">Production Support</span>
+          <span class="tag">Zapier</span>
         </div>
       </div>
       <div class="skill-group">
@@ -65,51 +76,86 @@
           <span class="tag">HTML</span>
           <span class="tag">CSS</span>
           <span class="tag">JavaScript</span>
+          <span class="tag">JSON</span>
         </div>
       </div>
       <div class="skill-group">
         <h3>Integrations</h3>
         <div class="tags">
-          <span class="tag">APIs</span>
-          <span class="tag">Databases</span>
+          <span class="tag">API</span>
+          <span class="tag">Database</span>
           <span class="tag">Excel</span>
           <span class="tag">Email</span>
           <span class="tag">Browser Automation</span>
+          <span class="tag">PBI</span>
+          <span class="tag">CRM</span>
+          <span class="tag">SaaS</span>
+          <span class="tag">LLM</span>
         </div>
       </div>
       <div class="skill-group">
-        <h3>Other</h3>
+        <h3>Hard Skills</h3>
         <div class="tags">
           <span class="tag">QA Testing</span>
           <span class="tag">User Validation</span>
           <span class="tag">Team Coordination</span>
           <span class="tag">Client Management</span>
           <span class="tag">Quality Control</span>
+          <span class="tag">Workflow Automation</span>
+          <span class="tag">Management on Production Support</span>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="card" id="experience">
+  <section class="card reveal" id="experience">
     <h2>Work Experience</h2>
     <div class="timeline">
 
       <div class="job">
         <div class="job-head">
           <h3>Business Automation Expert</h3>
-          <span class="job-date">Jul 2025 – Jul 2026</span>
+          <span class="job-date">Jul 2025 – July2026</span>
         </div>
         <div class="job-company">Spreetail</div>
-        <p>Created bots with database, Excel, email, browser, and API integrations in Power Automate. Built AI integrations with Cursor and Claude to stay accountable on support and enhancement work for bots and processes in production.</p>
+        <div class="job-location">🌎 Remote Freelance - US</div>
+        <p>Created bots with database, excel, email, browser and API integrations in Power
+Automate. Created AI Integrations with Cursor and Claude to keep myself accountable
+with my support and enhancement activities for bots and processes in production.</p>
+        <div class="factors">
+          <span class="factors-label">Success Factors</span>
+          <ul>
+            <li>Leadership on Production Support</li>
+            <li>Creation of a Ticketing System</li>
+            <li>Bot development with AI Integration on Power Automate</li>
+            <li>Architecture for Framework on Power Automate</li>
+            <li>RPA analisys and documentation for bot development</li>
+            <li>Client Management</li>
+            <li>Dashboard and Metrics on PBI</li>
+          </ul>
+        </div>
       </div>
 
       <div class="job">
         <div class="job-head">
           <h3>Automation Expert</h3>
-          <span class="job-date">Nov 2024 – Jun 2025</span>
+          <span class="job-date">Nov 2024 – June 2025</span>
         </div>
         <div class="job-company">Automation Anywhere</div>
-        <p>Created bots with database, Excel, email, browser, and API integrations in Automation Anywhere 360. Built reusable bot structures for multiple processes and designed a framework to handle multiple concurrent user requests. Provided support across multiple production processes.</p>
+        <div class="job-location">🌎 Remote Freelance - US</div>
+        <p>Created bots with database, excel, email, browser and API integrations in Automation
+Anywhere 360, worked reusable structures to enhance the bot creation and decrease the
+development time to send bots to send bots to production. Worked with framework
+integrations.</p>
+        <div class="factors">
+          <span class="factors-label">Success Factors</span>
+          <ul>
+            <li>Framework Integration</li>
+            <li>Bot development with reusable capabilities</li>
+            <li>API and JSON management to send information for reusable bots</li>
+            <li>Client Management</li>
+          </ul>
+        </div>
       </div>
 
       <div class="job">
@@ -118,38 +164,88 @@
           <span class="job-date">Dec 2022 – Sept 2024</span>
         </div>
         <div class="job-company">NTT DATA</div>
-        <p>Developed bots with integrations across databases, Excel, email, browsers, and APIs using Automation Anywhere 360, Bizagi, and UI Path. Built reusable bot structures to efficiently support multiple business processes and performed ongoing maintenance for bots in production.</p>
+        <div class="job-location">🌎 Remote - Colombia</div>
+        <p>Developed bots with integrations across databases, Excel, email, browsers, and APIs
+using Automation Anywhere 360, Bizagi and UI Path. Created reusable bot structures to
+support multiple business processes efficiently and performed maintenance activities for
+bots in production.</p>
+        <div class="factors">
+          <span class="factors-label">Success Factors</span>
+          <ul>
+            <li>Framework Integration</li>
+            <li>Bot development with reusable capabilities</li>
+            <li>Dashboards for metrics and meetings with stakeholders on PBI</li>
+            <li>Client Management</li>
+          </ul>
+        </div>
       </div>
 
       <div class="job">
         <div class="job-head">
           <h3>Senior Developer</h3>
-          <span class="job-date">Jun 2022 – Nov 2022</span>
+          <span class="job-date">June 2022 – Nov 2022</span>
         </div>
         <div class="job-company">Deloitte</div>
-        <p>Worked as a senior developer on Unqork, primarily coding in HTML, CSS, and JavaScript. Additional responsibilities included site revisions, mock-up redesigns, team management, client management, and quality control of the team's development work.</p>
+        <div class="job-location">🏢 On site - Argentina</div>
+        <p>Worked as a senior developer of Unqork, most of this work was based coding on HTML,
+CSS and Javascript. On my additional roles i was working with site revisions, mock-up redesigns, Team management, client management and quality control of the team
+development.</p>
+        <div class="factors">
+          <span class="factors-label">Success Factors</span>
+          <ul>
+            <li>Leadership on Development</li>
+            <li>Team management</li>
+            <li>Client Management</li>
+            <li>Dashboard and metrics integrationson PBI</li>
+            <li>Development on HTML and CSS</li>
+            <li>Design and QA on Figma</li>
+          </ul>
+        </div>
       </div>
 
       <div class="job">
         <div class="job-head">
           <h3>Jr RPA Developer</h3>
-          <span class="job-date">Jan 2020 – Feb 2022</span>
+          <span class="job-date">Jan 2019 – Feb 2022</span>
         </div>
         <div class="job-company">Teleperformance</div>
-        <p>Developed bots using Automation Anywhere v11 and 360, and UI Path, integrating both platforms with multiple CRMs, SQL, APIs, error handling, and SMTP for email integrations and notifications.</p>
+        <div class="job-location">🌎 Remote - Colombia</div>
+        <p>Developed bot using Automation Anywhere v11 and 360, UI Path, integrating both
+platforms with multiple CRMS, SQL, API, Error handling and SMTP for email integrations
+and notifications.</p>
+        <div class="factors">
+          <span class="factors-label">Success Factors</span>
+          <ul>
+            <li>Bot development</li>
+            <li>Documentation</li>
+            <li>Integration with multiple platforms for automation</li>
+            <li>Dashboard integrations with PBI</li>
+          </ul>
+        </div>
       </div>
 
     </div>
   </section>
 
-  <section class="card" id="education">
+  <section class="card reveal" id="education">
     <h2>Education &amp; Languages</h2>
-    <ul class="edu-list">
-      <li>Technologist in Mechatronics</li>
-      <li>Application of Methodological Tools in Research: Science, Processes, Technology and Innovation</li>
-      <li>Software Engineering — <em>in progress</em></li>
-      <li>English — B2</li>
-    </ul>
+    <div class="edu-grid">
+      <div>
+        <h3>Educational Background</h3>
+        <ul class="edu-list">
+          <li>Technologist in Mechatronics</li>
+          <li>Application of methodological tools in research: Science Processes Technology and Innovation</li>
+          <li>Software Engineering - In progress</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Languages</h3>
+        <ul class="edu-list">
+          <li>English - C1</li>
+          <li>Spanish - Native</li>
+        </ul>
+      </div>
+    </div>
   </section>
 
 </main>
