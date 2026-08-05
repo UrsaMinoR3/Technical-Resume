@@ -109,7 +109,19 @@
       const mascotImg = document.getElementById("mascot-img");
       const FRAME_DIR = "img/cat-frames/";
       const FRAMES = ["cat-05", "cat-13", "cat-17", "cat-00", "cat-01", "cat-04", "cat-16", "cat-20", "cat-07", "cat-19"];
-      const TARGET_SELECTOR = ".card, .icon-item, .job-card, .factors-btn, #theme-toggle, .profile-photo, .hero-btn";
+      // Deliberately content elements only — never a real interactive
+      // control (hero-btn, factors-btn, theme-toggle). A real bug found
+      // live: those were included, so the 64px sprite (z-index above
+      // everything) rendered directly on top of the GitHub/LinkedIn
+      // buttons the instant they were hovered, hiding them right when
+      // the user meant to click. Clicks still worked underneath
+      // (pointer-events: none), but the button visually vanished.
+      // ".card" is also deliberately excluded: it wraps entire page
+      // sections edge-to-edge, so a resting mouse anywhere over normal
+      // reading content matched it and pinned currentTarget indefinitely
+      // — starving the autonomous wander() timer, which is why the cat
+      // previously looked "stuck" instead of wandering.
+      const TARGET_SELECTOR = ".icon-item, .job-card, .factors-card, .profile-photo";
       const WANDER_INTERVAL_MS = 3200;
 
       let currentTarget = null; // actively hovered element, if any
@@ -121,12 +133,21 @@
 
       function isOnScreen(el) {
         const r = el.getBoundingClientRect();
-        return r.bottom > 0 && r.top < window.innerHeight && r.right > 0 && r.left < window.innerWidth;
+        // width/height guard matters here: a collapsed .factors-card
+        // (closed accordion panel) still has a real position via
+        // getBoundingClientRect() even though max-height:0 makes it
+        // invisible — without this check wander() could "land" the cat
+        // on an invisible, zero-size element.
+        return (
+          r.width > 0 && r.height > 0 &&
+          r.bottom > 0 && r.top < window.innerHeight &&
+          r.right > 0 && r.left < window.innerWidth
+        );
       }
 
       function positionAt(el) {
         const rect = el.getBoundingClientRect();
-        const mascotSize = 64;
+        const mascotSize = 64; // keep in sync with --size-mascot in style.css
         const margin = 8;
         let left, useLeftCorner;
 
