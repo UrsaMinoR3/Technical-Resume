@@ -76,7 +76,7 @@
     }
   } catch (e) { /* CSS default already has .reveal visible */ }
 
-  /* ---------- Flip cards: tap-to-flip for touch (hover already works via CSS) ---------- */
+  /* ---------- Success-factor drawers: tap-to-open for touch (hover already works via CSS) ---------- */
   try {
     document.querySelectorAll(".flip-card").forEach((card) => {
       card.addEventListener("click", () => card.classList.toggle("is-flipped"));
@@ -84,24 +84,38 @@
   } catch (e) { /* non-critical */ }
 
   /* ============================================================
-     Pixel-cat mascot — jumps to a corner of whatever's being
-     hovered, cycling through a handful of its 25 poses. Pure
-     decoration (pointer-events:none on the element itself), so a
+     Pixel-cat mascot — wanders on its own between container
+     corners, and jumps straight to whatever's being hovered.
+     Pure decoration (aria-hidden, pointer-events:none), so any
      failure here can never block or hide real content.
+
+     Uses matchMedia('(hover:hover)') rather than checking for
+     touch support — a real bug found live: checking
+     "ontouchstart" in window disables this on any touchscreen
+     laptop even when the person is clearly using a mouse, since
+     Windows reports touch capability separately from what's
+     actually driving the pointer right now.
      ============================================================ */
   try {
-    if (!("ontouchstart" in window)) { // desktop/mouse only — touch users get tap-to-flip instead
+    const canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    if (canHover) {
       const mascot = document.getElementById("mascot");
       const mascotImg = document.getElementById("mascot-img");
       const FRAME_DIR = "img/cat-frames/";
-      const HOVER_FRAMES = ["cat-05", "cat-13", "cat-17", "cat-00", "cat-01", "cat-04", "cat-16", "cat-20"];
+      const FRAMES = ["cat-05", "cat-13", "cat-17", "cat-00", "cat-01", "cat-04", "cat-16", "cat-20", "cat-07", "cat-19"];
       const TARGET_SELECTOR = ".card, .icon-item, .flip-card, #theme-toggle, .profile-photo";
+      const WANDER_INTERVAL_MS = 3200;
 
-      let currentTarget = null;
+      let currentTarget = null; // actively hovered element, if any
       let hideTimer = null;
 
       function pickFrame() {
-        return HOVER_FRAMES[Math.floor(Math.random() * HOVER_FRAMES.length)];
+        return FRAMES[Math.floor(Math.random() * FRAMES.length)];
+      }
+
+      function isOnScreen(el) {
+        const r = el.getBoundingClientRect();
+        return r.bottom > 0 && r.top < window.innerHeight && r.right > 0 && r.left < window.innerWidth;
       }
 
       function positionAt(el) {
@@ -127,6 +141,14 @@
         mascot.classList.add("is-visible");
       }
 
+      function wander() {
+        if (currentTarget) return; // don't fight active hover-tracking
+        const candidates = Array.from(document.querySelectorAll(TARGET_SELECTOR)).filter(isOnScreen);
+        if (!candidates.length) return;
+        const el = candidates[Math.floor(Math.random() * candidates.length)];
+        positionAt(el);
+      }
+
       document.addEventListener("mouseover", (e) => {
         const el = e.target.closest(TARGET_SELECTOR);
         if (el && el !== currentTarget) {
@@ -141,13 +163,17 @@
         const to = e.relatedTarget && e.relatedTarget.closest ? e.relatedTarget.closest(TARGET_SELECTOR) : null;
         if (el && el === currentTarget && !to) {
           currentTarget = null;
-          hideTimer = setTimeout(() => mascot.classList.remove("is-visible"), 200);
+          // no fade-out here — the mascot just resumes wandering on its own
         }
       });
 
       window.addEventListener("scroll", () => {
         if (currentTarget) positionAt(currentTarget);
       }, { passive: true });
+
+      // Start wandering immediately, then keep going on an interval.
+      wander();
+      setInterval(wander, WANDER_INTERVAL_MS);
     }
   } catch (e) { /* mascot is a fun extra, never critical */ }
 })();
