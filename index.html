@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>David Hernandez — RPA & AI Developer</title>
 <meta name="description" content="David Hernandez — RPA & AI Developer. 6+ years building business process automations, bots, and web systems." />
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤖</text></svg>" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐙</text></svg>" />
 <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -13,19 +13,14 @@
 <div class="progress-bar" id="progress-bar"></div>
 <button id="theme-toggle" aria-label="Toggle dark/light theme" title="Toggle theme">🌓</button>
 
+<div class="mascot" id="mascot" aria-hidden="true">
+  <img id="mascot-img" src="img/cat-frames/cat-07.png" alt="" />
+</div>
+
 <header class="hero">
-  <div class="hero-bg" aria-hidden="true">
-    <span class="blob blob-a"></span>
-    <span class="blob blob-b"></span>
-    <span class="blob blob-c"></span>
-    <span class="float-icon" style="--x:8%;  --delay:0s;  --dur:16s;">🤖</span>
-    <span class="float-icon" style="--x:22%; --delay:2s;  --dur:20s;">⚙️</span>
-    <span class="float-icon" style="--x:78%; --delay:1s;  --dur:18s;">🔧</span>
-    <span class="float-icon" style="--x:90%; --delay:4s;  --dur:22s;">💻</span>
-    <span class="float-icon" style="--x:55%; --delay:3s;  --dur:19s;">🧠</span>
-    <span class="float-icon" style="--x:38%; --delay:5s;  --dur:24s;">🔗</span>
-  </div>
-  <div class="wrap hero-content" id="parallax-content">
+  <div class="hero-photo" id="hero-photo" aria-hidden="true"></div>
+  <div class="hero-overlay" aria-hidden="true"></div>
+  <div class="wrap hero-content">
     <h1 class="reveal-in">David Hernandez</h1>
     <p class="title reveal-in" style="--rd:0.1s">RPA &amp; AI Developer</p>
     <div class="contact reveal-in" style="--rd:0.2s">
@@ -36,14 +31,25 @@
   </div>
 </header>
 
-<main class="content-shell">
+<main class="page-wrap">
 
-  <aside class="sidebar">
-    <section class="card reveal sidebar-card" id="skills">
-      <h2>Technical Skills</h2>
+  <section class="card reveal" id="about" data-mascot-corner="top-right">
+    <h2>About Me</h2>
+    <div class="about-layout">
+      <img class="profile-photo" src="img/Profile.jpg" alt="David Hernandez" />
+      <p>Automation and software professional with 6+ years of experience building and
+supporting business process automations, RPA solutions and web systems. Skilled in
+developing bots and workflow automations with integrations across databases, Excel,
+email, browsers, and APIs. Hands on experience with Automation Anywhere 360, Power
+Automate, Python, SQL, JavaScript, HTML, and CSS. Known for adaptability, fast learning,
+problem solving, and cross functional collaboration in dynamic environments.</p>
+    </div>
+
+    <div class="skills-block">
+      <h3 class="skills-heading">Technical Skills</h3>
 
       <div class="skill-group">
-        <h3>🤖 Automation Tools</h3>
+        <h4>🤖 Automation Tools</h4>
         <div class="icon-list">
           <div class="icon-item"><span class="icon">🅰️</span>Automation Anywhere 360</div>
           <div class="icon-item"><span class="icon">🔄</span>Power Automate</div>
@@ -53,7 +59,7 @@
       </div>
 
       <div class="skill-group">
-        <h3>🧠 AI Tools</h3>
+        <h4>🧠 AI Tools</h4>
         <div class="icon-list">
           <div class="icon-item"><span class="icon">🖱️</span>Cursor</div>
           <div class="icon-item"><span class="icon">✳️</span>Claude</div>
@@ -62,7 +68,7 @@
       </div>
 
       <div class="skill-group">
-        <h3>💻 Programming</h3>
+        <h4>💻 Programming</h4>
         <div class="icon-list">
           <div class="icon-item"><span class="icon">🐍</span>Python</div>
           <div class="icon-item"><span class="icon">🗃️</span>SQL</div>
@@ -74,7 +80,7 @@
       </div>
 
       <div class="skill-group">
-        <h3>🔌 Integrations</h3>
+        <h4>🔌 Integrations</h4>
         <div class="icon-list">
           <div class="icon-item"><span class="icon">🔌</span>API</div>
           <div class="icon-item"><span class="icon">🗄️</span>Database</div>
@@ -89,7 +95,7 @@
       </div>
 
       <div class="skill-group">
-        <h3>🛠️ Hard Skills</h3>
+        <h4>🛠️ Hard Skills</h4>
         <div class="icon-list">
           <div class="icon-item"><span class="icon">✅</span>QA Testing</div>
           <div class="icon-item"><span class="icon">👤</span>User Validation</div>
@@ -100,134 +106,167 @@
           <div class="icon-item"><span class="icon">📟</span>Management on Production Support</div>
         </div>
       </div>
-    </section>
-  </aside>
-
-  <div class="main-col">
-
-  <section class="card reveal" id="about">
-    <h2>About Me</h2>
-    <p>Automation and software professional with 6+ years of experience building and
-supporting business process automations, RPA solutions and web systems. Skilled in
-developing bots and workflow automations with integrations across databases, Excel,
-email, browsers, and APIs. Hands on experience with Automation Anywhere 360, Power
-Automate, Python, SQL, JavaScript, HTML, and CSS. Known for adaptability, fast learning,
-problem solving, and cross functional collaboration in dynamic environments.</p>
+    </div>
   </section>
 
   <section class="card reveal" id="experience">
     <h2>Work Experience</h2>
-    <div class="timeline">
+    <p class="section-note">Flip a card (hover on desktop, tap on mobile) to see its Success Factors. The timeline grows stronger toward today.</p>
 
-      <div class="job">
-        <div class="job-head">
-          <h3>Business Automation Expert</h3>
-          <span class="job-date">Jul 2025 – July2026</span>
-        </div>
-        <div class="job-company">Spreetail</div>
-        <div class="job-location">🌎 Remote Freelance - US</div>
-        <p>Created bots with database, excel, email, browser and API integrations in Power
-Automate. Created AI Integrations with Cursor and Claude to keep myself accountable
-with my support and enhancement activities for bots and processes in production.</p>
-        <div class="factors">
-          <span class="factors-label">Success Factors</span>
-          <ul>
-            <li>Leadership on Production Support</li>
-            <li>Creation of a Ticketing System</li>
-            <li>Bot development with AI Integration on Power Automate</li>
-            <li>Architecture for Framework on Power Automate</li>
-            <li>RPA analisys and documentation for bot development</li>
-            <li>Client Management</li>
-            <li>Dashboard and Metrics on PBI</li>
-          </ul>
+    <div class="zigzag">
+      <div class="zz-line" aria-hidden="true"></div>
+
+      <!-- Chronological ascending: weakest (earliest) to strongest (most recent) -->
+
+      <div class="zz-item zz-left" style="--strength: 0.15">
+        <span class="zz-dot"></span>
+        <div class="flip-card">
+          <div class="flip-inner">
+            <div class="flip-front">
+              <div class="job-head">
+                <h3>Jr RPA Developer</h3>
+                <span class="job-date">Jan 2019 – Feb 2022</span>
+              </div>
+              <div class="job-company">Teleperformance</div>
+              <div class="job-location">🌎 Remote - Colombia</div>
+              <p>Developed bot using Automation Anywhere v11 and 360, UI Path, integrating both
+platforms with multiple CRMS, SQL, API, Error handling and SMTP for email integrations
+and notifications.</p>
+              <span class="flip-hint">↻ hover / tap for Success Factors</span>
+            </div>
+            <div class="flip-back">
+              <span class="factors-label">Success Factors</span>
+              <ul>
+                <li>Bot development</li>
+                <li>Documentation</li>
+                <li>Integration with multiple platforms for automation</li>
+                <li>Dashboard integrations with PBI</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="job">
-        <div class="job-head">
-          <h3>Automation Expert</h3>
-          <span class="job-date">Nov 2024 – June 2025</span>
-        </div>
-        <div class="job-company">Automation Anywhere</div>
-        <div class="job-location">🌎 Remote Freelance - US</div>
-        <p>Created bots with database, excel, email, browser and API integrations in Automation
-Anywhere 360, worked reusable structures to enhance the bot creation and decrease the
-development time to send bots to send bots to production. Worked with framework
-integrations.</p>
-        <div class="factors">
-          <span class="factors-label">Success Factors</span>
-          <ul>
-            <li>Framework Integration</li>
-            <li>Bot development with reusable capabilities</li>
-            <li>API and JSON management to send information for reusable bots</li>
-            <li>Client Management</li>
-          </ul>
+      <div class="zz-item zz-right" style="--strength: 0.35">
+        <span class="zz-dot"></span>
+        <div class="flip-card">
+          <div class="flip-inner">
+            <div class="flip-front">
+              <div class="job-head">
+                <h3>Senior Developer</h3>
+                <span class="job-date">June 2022 – Nov 2022</span>
+              </div>
+              <div class="job-company">Deloitte</div>
+              <div class="job-location">🏢 On site - Argentina</div>
+              <p>Worked as a senior developer of Unqork, most of this work was based coding on HTML,
+CSS and Javascript. On my additional roles i was working with site revisions, mock-up redesigns, Team management, client management and quality control of the team
+development.</p>
+              <span class="flip-hint">↻ hover / tap for Success Factors</span>
+            </div>
+            <div class="flip-back">
+              <span class="factors-label">Success Factors</span>
+              <ul>
+                <li>Leadership on Development</li>
+                <li>Team management</li>
+                <li>Client Management</li>
+                <li>Dashboard and metrics integrationson PBI</li>
+                <li>Development on HTML and CSS</li>
+                <li>Design and QA on Figma</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="job">
-        <div class="job-head">
-          <h3>RPA Analyst</h3>
-          <span class="job-date">Dec 2022 – Sept 2024</span>
-        </div>
-        <div class="job-company">NTT DATA</div>
-        <div class="job-location">🌎 Remote - Colombia</div>
-        <p>Developed bots with integrations across databases, Excel, email, browsers, and APIs
+      <div class="zz-item zz-left" style="--strength: 0.55">
+        <span class="zz-dot"></span>
+        <div class="flip-card">
+          <div class="flip-inner">
+            <div class="flip-front">
+              <div class="job-head">
+                <h3>RPA Analyst</h3>
+                <span class="job-date">Dec 2022 – Sept 2024</span>
+              </div>
+              <div class="job-company">NTT DATA</div>
+              <div class="job-location">🌎 Remote - Colombia</div>
+              <p>Developed bots with integrations across databases, Excel, email, browsers, and APIs
 using Automation Anywhere 360, Bizagi and UI Path. Created reusable bot structures to
 support multiple business processes efficiently and performed maintenance activities for
 bots in production.</p>
-        <div class="factors">
-          <span class="factors-label">Success Factors</span>
-          <ul>
-            <li>Framework Integration</li>
-            <li>Bot development with reusable capabilities</li>
-            <li>Dashboards for metrics and meetings with stakeholders on PBI</li>
-            <li>Client Management</li>
-          </ul>
+              <span class="flip-hint">↻ hover / tap for Success Factors</span>
+            </div>
+            <div class="flip-back">
+              <span class="factors-label">Success Factors</span>
+              <ul>
+                <li>Framework Integration</li>
+                <li>Bot development with reusable capabilities</li>
+                <li>Dashboards for metrics and meetings with stakeholders on PBI</li>
+                <li>Client Management</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="job">
-        <div class="job-head">
-          <h3>Senior Developer</h3>
-          <span class="job-date">June 2022 – Nov 2022</span>
-        </div>
-        <div class="job-company">Deloitte</div>
-        <div class="job-location">🏢 On site - Argentina</div>
-        <p>Worked as a senior developer of Unqork, most of this work was based coding on HTML,
-CSS and Javascript. On my additional roles i was working with site revisions, mock-up redesigns, Team management, client management and quality control of the team
-development.</p>
-        <div class="factors">
-          <span class="factors-label">Success Factors</span>
-          <ul>
-            <li>Leadership on Development</li>
-            <li>Team management</li>
-            <li>Client Management</li>
-            <li>Dashboard and metrics integrationson PBI</li>
-            <li>Development on HTML and CSS</li>
-            <li>Design and QA on Figma</li>
-          </ul>
+      <div class="zz-item zz-right" style="--strength: 0.78">
+        <span class="zz-dot"></span>
+        <div class="flip-card">
+          <div class="flip-inner">
+            <div class="flip-front">
+              <div class="job-head">
+                <h3>Automation Expert</h3>
+                <span class="job-date">Nov 2024 – June 2025</span>
+              </div>
+              <div class="job-company">Automation Anywhere</div>
+              <div class="job-location">🌎 Remote Freelance - US</div>
+              <p>Created bots with database, excel, email, browser and API integrations in Automation
+Anywhere 360, worked reusable structures to enhance the bot creation and decrease the
+development time to send bots to send bots to production. Worked with framework
+integrations.</p>
+              <span class="flip-hint">↻ hover / tap for Success Factors</span>
+            </div>
+            <div class="flip-back">
+              <span class="factors-label">Success Factors</span>
+              <ul>
+                <li>Framework Integration</li>
+                <li>Bot development with reusable capabilities</li>
+                <li>API and JSON management to send information for reusable bots</li>
+                <li>Client Management</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="job">
-        <div class="job-head">
-          <h3>Jr RPA Developer</h3>
-          <span class="job-date">Jan 2019 – Feb 2022</span>
-        </div>
-        <div class="job-company">Teleperformance</div>
-        <div class="job-location">🌎 Remote - Colombia</div>
-        <p>Developed bot using Automation Anywhere v11 and 360, UI Path, integrating both
-platforms with multiple CRMS, SQL, API, Error handling and SMTP for email integrations
-and notifications.</p>
-        <div class="factors">
-          <span class="factors-label">Success Factors</span>
-          <ul>
-            <li>Bot development</li>
-            <li>Documentation</li>
-            <li>Integration with multiple platforms for automation</li>
-            <li>Dashboard integrations with PBI</li>
-          </ul>
+      <div class="zz-item zz-left zz-strongest" style="--strength: 1">
+        <span class="zz-dot"></span>
+        <div class="flip-card">
+          <div class="flip-inner">
+            <div class="flip-front">
+              <div class="job-head">
+                <h3>Business Automation Expert</h3>
+                <span class="job-date">Jul 2025 – July2026</span>
+              </div>
+              <div class="job-company">Spreetail</div>
+              <div class="job-location">🌎 Remote Freelance - US</div>
+              <p>Created bots with database, excel, email, browser and API integrations in Power
+Automate. Created AI Integrations with Cursor and Claude to keep myself accountable
+with my support and enhancement activities for bots and processes in production.</p>
+              <span class="flip-hint">↻ hover / tap for Success Factors</span>
+            </div>
+            <div class="flip-back">
+              <span class="factors-label">Success Factors</span>
+              <ul>
+                <li>Leadership on Production Support</li>
+                <li>Creation of a Ticketing System</li>
+                <li>Bot development with AI Integration on Power Automate</li>
+                <li>Architecture for Framework on Power Automate</li>
+                <li>RPA analisys and documentation for bot development</li>
+                <li>Client Management</li>
+                <li>Dashboard and Metrics on PBI</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -254,8 +293,6 @@ and notifications.</p>
       </div>
     </div>
   </section>
-
-  </div>
 
 </main>
 

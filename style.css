@@ -1,57 +1,57 @@
+/* ============================================================
+   Palette — GitHub's actual colors, not an approximation.
+   Light: github.com default theme. Dark: github.com dark theme.
+   The green scale is GitHub's real contribution-graph scale —
+   used here to visualize the "grows stronger over time" timeline.
+   ============================================================ */
 :root {
-  --navy: #16305c;
-  --navy-deep: #0e2140;
-  --teal: #1baf9e;
-  --violet: #7c5cff;
-  --page-bg: #f4f6f9;
+  --page-bg: #ffffff;
   --card-bg: #ffffff;
-  --text-primary: #16233a;
-  --text-secondary: #4b5768;
-  --text-muted: #8892a0;
-  --border: rgba(22, 48, 92, 0.10);
-  --tag-bg: rgba(27, 175, 158, 0.10);
-  --tag-text: #0e7f72;
-  --shadow: 0 1px 3px rgba(22, 48, 92, 0.06), 0 8px 24px rgba(22, 48, 92, 0.05);
+  --subtle-bg: #f6f8fa;
+  --text-primary: #1f2328;
+  --text-secondary: #59636e;
+  --text-muted: #6e7781;
+  --border: #d0d7de;
+  --accent: #0969da;
+  --accent-soft: rgba(9, 105, 218, 0.08);
+  --shadow: 0 1px 2px rgba(31,35,40,0.06), 0 6px 18px rgba(31,35,40,0.05);
+
+  --g0: #ebedf0; --g1: #9be9a8; --g2: #40c463; --g3: #30a14e; --g4: #216e39;
 }
 
 :root[data-theme="dark"] {
-  --navy: #1c3a68;
-  --navy-deep: #0a1830;
-  --teal: #3fd7c4;
-  --violet: #a48bff;
-  --page-bg: #0c1524;
-  --card-bg: #121e33;
-  --text-primary: #eef1f6;
-  --text-secondary: #b6c0cf;
-  --text-muted: #7c8798;
-  --border: rgba(255, 255, 255, 0.08);
-  --tag-bg: rgba(63, 215, 196, 0.12);
-  --tag-text: #6fe4d5;
-  --shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.25);
+  --page-bg: #0d1117;
+  --card-bg: #161b22;
+  --subtle-bg: #161b22;
+  --text-primary: #e6edf3;
+  --text-secondary: #9198a1;
+  --text-muted: #7d8590;
+  --border: #30363d;
+  --accent: #58a6ff;
+  --accent-soft: rgba(88, 166, 255, 0.12);
+  --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 6px 18px rgba(0,0,0,0.35);
+
+  --g0: #161b22; --g1: #0e4429; --g2: #006d32; --g3: #26a641; --g4: #39d353;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --navy: #1c3a68;
-    --navy-deep: #0a1830;
-    --teal: #3fd7c4;
-    --violet: #a48bff;
-    --page-bg: #0c1524;
-    --card-bg: #121e33;
-    --text-primary: #eef1f6;
-    --text-secondary: #b6c0cf;
-    --text-muted: #7c8798;
-    --border: rgba(255, 255, 255, 0.08);
-    --tag-bg: rgba(63, 215, 196, 0.12);
-    --tag-text: #6fe4d5;
-    --shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.25);
+    --page-bg: #0d1117;
+    --card-bg: #161b22;
+    --subtle-bg: #161b22;
+    --text-primary: #e6edf3;
+    --text-secondary: #9198a1;
+    --text-muted: #7d8590;
+    --border: #30363d;
+    --accent: #58a6ff;
+    --accent-soft: rgba(88, 166, 255, 0.12);
+    --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 6px 18px rgba(0,0,0,0.35);
+    --g0: #161b22; --g1: #0e4429; --g2: #006d32; --g3: #26a641; --g4: #39d353;
   }
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
-
 html { scroll-behavior: smooth; }
-
 body {
   background: var(--page-bg);
   color: var(--text-primary);
@@ -60,13 +60,7 @@ body {
   transition: background 0.2s ease, color 0.2s ease;
   overflow-x: hidden;
 }
-
-.wrap {
-  max-width: 860px;
-  margin: 0 auto;
-  padding: 0 24px;
-  position: relative;
-}
+.wrap { max-width: 860px; margin: 0 auto; padding: 0 24px; position: relative; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -75,378 +69,238 @@ body {
 
 /* ---------- Scroll progress bar ---------- */
 .progress-bar {
-  position: fixed;
-  top: 0; left: 0;
-  height: 3px;
-  width: 0%;
-  background: linear-gradient(90deg, var(--teal), var(--violet));
-  z-index: 30;
-  transition: width 0.1s linear;
+  position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+  background: var(--accent); z-index: 30; transition: width 0.1s linear;
 }
 
 /* ---------- Theme toggle ---------- */
 #theme-toggle {
-  position: fixed;
-  top: 16px;
-  right: 16px;
-  z-index: 20;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  background: rgba(255, 255, 255, 0.12);
-  color: #fff;
-  font-size: 18px;
-  cursor: pointer;
-  backdrop-filter: blur(6px);
-  transition: transform 0.2s ease, background 0.2s ease;
+  position: fixed; top: 16px; right: 16px; z-index: 25;
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 1px solid var(--border); background: var(--card-bg);
+  color: var(--text-primary); font-size: 18px; cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s ease;
 }
-#theme-toggle:hover { background: rgba(255, 255, 255, 0.22); transform: scale(1.08) rotate(15deg); }
+#theme-toggle:hover { transform: scale(1.08) rotate(15deg); }
 
-/* ---------- Hero + parallax ---------- */
+/* ============================================================
+   Mascot — the pixel cat. Fixed-position, jumps to the corner of
+   whatever element is currently hovered/focused. Pure decoration
+   (aria-hidden) — never gates or blocks content.
+   ============================================================ */
+.mascot {
+  position: fixed;
+  top: 0; left: 0;
+  width: 56px;
+  z-index: 40;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-1000px, -1000px) scale(0.9);
+  transition: transform 0.45s cubic-bezier(.34,1.56,.64,1), opacity 0.25s ease;
+}
+.mascot.is-visible { opacity: 1; }
+.mascot img { width: 100%; height: auto; display: block; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.25)); }
+.mascot.is-flipped img { transform: scaleX(-1); }
+
+/* ---------- Hero (real photo parallax) ---------- */
 .hero {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-deep) 100%);
   color: #fff;
   padding: 90px 0 110px;
   text-align: center;
-  /* min(), not a bare vh — mobile browsers resize the visible viewport as the
-     address bar collapses/expands, which can otherwise leave dead space or
-     push content below the fold on first paint. Capped so it never forces
-     more empty height than the content actually needs. */
-  min-height: min(60vh, 480px);
+  min-height: min(62vh, 500px);
   display: flex;
   align-items: center;
-  /* diagonal bottom edge instead of a hard rectangle cut into the page below */
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0 92%);
 }
-
 @media (max-width: 480px) {
   .hero { min-height: auto; padding: 64px 0 90px; }
 }
 
-.hero-bg { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
-
-.blob {
+.hero-photo {
   position: absolute;
-  /* irregular, hand-drawn-feeling blob shapes instead of perfect circles —
-     the classic "AI gradient orb" look is exactly what a plain 50% radius gives */
-  filter: blur(60px);
-  opacity: 0.35;
+  inset: -60px -20px;
+  background-image: url("img/Parallax.avif");
+  background-size: cover;
+  background-position: center;
+  /* sober B&W — desaturated, darkened so the warm photo doesn't fight the
+     monochrome theme; a little contrast keeps it from looking washed out */
+  filter: grayscale(1) contrast(1.15) brightness(0.42);
   will-change: transform;
-  animation: blobMorph 14s ease-in-out infinite;
+  transform: scale(1.12);
 }
-.blob-a {
-  width: 380px; height: 400px; background: var(--teal);
-  top: -120px; left: -80px;
-  border-radius: 42% 58% 65% 35% / 45% 40% 60% 55%;
-}
-.blob-b {
-  width: 320px; height: 300px; background: var(--violet);
-  bottom: -140px; right: -60px;
-  border-radius: 60% 40% 35% 65% / 55% 65% 35% 45%;
-  animation-delay: -5s;
-}
-.blob-c {
-  width: 240px; height: 260px; background: #ffffff;
-  top: 40%; left: 60%; opacity: 0.08;
-  border-radius: 55% 45% 40% 60% / 40% 55% 45% 60%;
-  animation-delay: -9s;
-}
-@keyframes blobMorph {
-  0%, 100% { border-radius: 42% 58% 65% 35% / 45% 40% 60% 55%; }
-  33%      { border-radius: 60% 40% 35% 65% / 55% 65% 35% 45%; }
-  66%      { border-radius: 48% 52% 55% 45% / 40% 50% 50% 60%; }
-}
-
-.float-icon {
-  position: absolute;
-  left: var(--x);
-  top: 100%;
-  font-size: 26px;
-  opacity: 0.16;
-  animation: floatUp var(--dur, 18s) linear var(--delay, 0s) infinite;
-  will-change: transform;
-}
-@keyframes floatUp {
-  0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
-  10%  { opacity: 0.18; }
-  90%  { opacity: 0.18; }
-  100% { transform: translateY(-620px) rotate(25deg); opacity: 0; }
+.hero-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.72) 100%);
 }
 
 .hero-content { position: relative; z-index: 2; }
-
-.hero h1 {
-  font-size: clamp(32px, 5vw, 48px);
-  font-weight: 800;
-  letter-spacing: -0.01em;
-}
-.hero .title {
-  margin-top: 6px;
-  font-size: 17px;
-  font-weight: 600;
-  color: var(--teal);
-  letter-spacing: 0.02em;
-}
-.hero .contact {
-  margin-top: 20px;
-  display: flex;
-  justify-content: center;
-  gap: 22px;
-  flex-wrap: wrap;
-  font-size: 14.5px;
-}
-.hero .contact a {
-  color: rgba(255, 255, 255, 0.88);
-  text-decoration: none;
-}
+.hero h1 { font-size: clamp(32px, 5vw, 48px); font-weight: 800; letter-spacing: -0.01em; }
+.hero .title { margin-top: 6px; font-size: 17px; font-weight: 600; color: var(--accent); letter-spacing: 0.02em; }
+.hero .contact { margin-top: 20px; display: flex; justify-content: center; gap: 22px; flex-wrap: wrap; font-size: 14.5px; }
+.hero .contact a { color: rgba(255,255,255,0.88); text-decoration: none; }
 .hero .contact a:hover { color: #fff; text-decoration: underline; }
 
-/* fade/slide-in for hero text on load */
-.reveal-in {
-  opacity: 0;
-  transform: translateY(16px);
-  animation: revealIn 0.7s ease forwards;
-  animation-delay: var(--rd, 0s);
-}
-@keyframes revealIn {
-  to { opacity: 1; transform: translateY(0); }
-}
+.reveal-in { opacity: 0; transform: translateY(16px); animation: revealIn 0.7s ease forwards; animation-delay: var(--rd, 0s); }
+@keyframes revealIn { to { opacity: 1; transform: translateY(0); } }
 
-.scroll-cue {
-  margin: 34px auto 0;
-  width: 22px; height: 36px;
-  border: 2px solid rgba(255,255,255,0.35);
-  border-radius: 14px;
-  position: relative;
-}
-.scroll-cue span {
-  position: absolute;
-  top: 6px; left: 50%;
-  width: 4px; height: 8px;
-  margin-left: -2px;
-  background: var(--teal);
-  border-radius: 2px;
-  animation: scrollCue 1.6s ease-in-out infinite;
-}
-@keyframes scrollCue {
-  0% { transform: translateY(0); opacity: 1; }
-  70% { transform: translateY(12px); opacity: 0; }
-  100% { opacity: 0; }
-}
+.scroll-cue { margin: 34px auto 0; width: 22px; height: 36px; border: 2px solid rgba(255,255,255,0.35); border-radius: 14px; position: relative; }
+.scroll-cue span { position: absolute; top: 6px; left: 50%; width: 4px; height: 8px; margin-left: -2px; background: var(--accent); border-radius: 2px; animation: scrollCue 1.6s ease-in-out infinite; }
+@keyframes scrollCue { 0% { transform: translateY(0); opacity: 1; } 70% { transform: translateY(12px); opacity: 0; } 100% { opacity: 0; } }
 
-/* ---------- Asymmetric content layout ---------- */
-/* Wider shell than the hero's centered .wrap, and gridless in spirit — a
-   sticky icon-rich skills rail alongside a wider reading column, instead of
-   one narrow centered stack of cards (the classic "AI template" tell). */
-.content-shell {
-  max-width: 1180px;
-  margin: 0 auto;
-  padding: 8px 24px 70px;
-  position: relative;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
-}
+/* ---------- Page shell ---------- */
+.page-wrap { max-width: 900px; margin: 0 auto; padding: 40px 24px 70px; }
 
-@media (min-width: 880px) {
-  .content-shell {
-    grid-template-columns: 300px minmax(0, 1fr);
-    align-items: start;
-    gap: 28px;
-  }
-  .sidebar { position: sticky; top: 76px; }
-}
-
-.sidebar-card { margin-bottom: 0; }
-
-.main-col { display: flex; flex-direction: column; gap: 20px; }
-.main-col .card { margin-bottom: 0; }
-
-/* ---------- Scroll-reveal sections ---------- */
-
-/* Content is visible by default — the fade/slide-in only ever activates once
-   JS has confirmed (via .js-reveal on <html>) that it can reliably reverse it.
-   This way a mobile browser quirk that stops the reveal from firing just means
-   "no animation," never "invisible resume." */
-.reveal {
-  opacity: 1;
-  transform: none;
-}
-html.js-reveal .reveal {
-  opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
-html.js-reveal .reveal.in-view {
-  opacity: 1;
-  transform: translateY(0);
-}
+/* content visible by default; JS only ever adds the reveal animation on
+   top once it's confirmed working (see script.js) */
+.reveal { opacity: 1; transform: none; }
+html.js-reveal .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.6s ease, transform 0.6s ease; }
+html.js-reveal .reveal.in-view { opacity: 1; transform: translateY(0); }
 
 /* ---------- Cards ---------- */
 .card {
   background: var(--card-bg);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: 12px;
   box-shadow: var(--shadow);
-  padding: 26px 28px;
-  margin-bottom: 20px;
+  padding: 28px 30px;
+  margin-bottom: 22px;
   cursor: default;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.2s ease, border-color 0.2s ease;
 }
-.card:hover { transform: translateY(-3px); box-shadow: 0 4px 10px rgba(22,48,92,0.08), 0 16px 32px rgba(22,48,92,0.08); }
-
 .card h2 {
-  font-size: 13px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--teal);
-  margin-bottom: 14px;
+  font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--accent); margin-bottom: 16px;
 }
 .card p { color: var(--text-secondary); font-size: 15px; white-space: pre-line; }
+.section-note { color: var(--text-muted); font-size: 12.5px; margin: -8px 0 18px; }
 
-/* ---------- Skills (icon rows, sidebar) ---------- */
-.skill-group { margin-bottom: 22px; }
+/* ---------- About: circular photo + text ---------- */
+.about-layout { display: flex; flex-direction: column; align-items: center; gap: 18px; text-align: center; margin-bottom: 8px; }
+.profile-photo {
+  width: 128px; height: 128px; border-radius: 50%; object-fit: cover;
+  border: 3px solid var(--border); box-shadow: var(--shadow); flex-shrink: 0;
+}
+@media (min-width: 640px) {
+  .about-layout { flex-direction: row; align-items: flex-start; text-align: left; }
+  .profile-photo { width: 140px; height: 140px; }
+}
+
+.skills-block { margin-top: 26px; padding-top: 22px; border-top: 1px solid var(--border); }
+.skills-heading { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 14px; }
+
+.skill-group { margin-bottom: 20px; }
 .skill-group:last-child { margin-bottom: 0; }
-.skill-group h3 {
-  font-size: 12.5px;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 8px;
-}
-.icon-list { display: flex; flex-direction: column; gap: 3px; }
+.skill-group h4 { font-size: 12.5px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; }
+.icon-list { display: flex; flex-wrap: wrap; gap: 6px; }
 .icon-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-secondary);
-  padding: 6px 8px;
-  border-radius: 8px;
-  cursor: default;
-  /* background tint on hover, not a text-color swap — keeps contrast safe
-     in both themes without needing a special-cased fixed hover color */
-  transition: background 0.15s ease, transform 0.15s ease, color 0.15s ease;
+  display: flex; align-items: center; gap: 7px;
+  font-size: 12.5px; font-weight: 500; color: var(--text-secondary);
+  background: var(--subtle-bg); border: 1px solid var(--border);
+  padding: 5px 10px; border-radius: 6px; cursor: default;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
 }
-.icon-item:hover {
-  background: var(--tag-bg);
-  color: var(--text-primary);
-  transform: translateX(3px);
+.icon-item:hover { background: var(--accent-soft); border-color: var(--accent); transform: translateY(-2px); }
+.icon-item .icon { font-size: 14px; }
+
+/* ============================================================
+   Zigzag experience timeline — alternating sides, connected by a
+   center line that gains strength (GitHub-green intensity) as it
+   moves from the earliest role to the most recent.
+   ============================================================ */
+.zigzag { position: relative; padding: 10px 0; }
+.zz-line {
+  position: absolute;
+  left: 50%; top: 0; bottom: 0; width: 3px;
+  transform: translateX(-50%);
+  background: linear-gradient(to bottom, var(--g1), var(--g2) 35%, var(--g3) 65%, var(--g4));
+  border-radius: 3px;
 }
-.icon-item .icon {
-  font-size: 16px;
-  width: 22px;
-  text-align: center;
-  flex-shrink: 0;
+@media (max-width: 720px) {
+  .zz-line { left: 18px; }
 }
 
-/* ---------- Experience timeline ---------- */
-.timeline { display: flex; flex-direction: column; gap: 30px; }
-.job {
+.zz-item {
   position: relative;
-  padding-left: 22px;
-  border-left: 2px solid var(--border);
+  width: 46%;
+  margin-bottom: 34px;
 }
-.job::before {
-  content: "";
+.zz-item.zz-left { margin-right: 54%; text-align: right; }
+.zz-item.zz-right { margin-left: 54%; text-align: left; }
+
+.zz-dot {
   position: absolute;
-  left: -7px;
-  top: 4px;
-  width: 12px;
-  height: 12px;
+  top: 24px;
+  width: 16px; height: 16px;
   border-radius: 50%;
-  background: var(--teal);
-  box-shadow: 0 0 0 3px var(--card-bg), 0 0 0 3px var(--card-bg);
-  animation: dotPulse 2.4s ease-in-out infinite;
+  /* plain fallback first — browsers without color-mix() just keep this
+     instead of silently ending up with no background at all */
+  background: var(--g3);
+  background: color-mix(in srgb, var(--g4) calc(var(--strength) * 100%), var(--g0));
+  box-shadow: 0 0 0 4px var(--page-bg);
+  box-shadow: 0 0 0 4px var(--page-bg), 0 0 calc(4px + 10px * var(--strength)) color-mix(in srgb, var(--g4) calc(var(--strength) * 80%), transparent);
 }
-@keyframes dotPulse {
-  0%, 100% { box-shadow: 0 0 0 3px var(--card-bg), 0 0 0 3px rgba(27,175,158,0.0); }
-  50% { box-shadow: 0 0 0 3px var(--card-bg), 0 0 0 8px rgba(27,175,158,0.18); }
-}
-.job-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-.job-head h3 { font-size: 16px; font-weight: 700; }
-.job-date { font-size: 12.5px; color: var(--text-muted); font-weight: 600; white-space: nowrap; }
-.job-company { font-size: 13.5px; font-weight: 700; color: var(--teal); margin-top: 2px; }
-.job-location { font-size: 12px; color: var(--text-muted); margin: 2px 0 8px; }
-.job p { font-size: 14.5px; margin-bottom: 12px; }
+.zz-item.zz-left .zz-dot { right: -8px; transform: translateX(50%); }
+.zz-item.zz-right .zz-dot { left: -8px; transform: translateX(-50%); }
 
-.factors {
-  background: color-mix(in srgb, var(--teal) 6%, transparent);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 12px 14px;
+@media (max-width: 720px) {
+  .zigzag { padding-left: 40px; }
+  .zz-item, .zz-item.zz-left, .zz-item.zz-right {
+    width: 100%; margin-left: 0; margin-right: 0; text-align: left;
+  }
+  .zz-item.zz-left .zz-dot, .zz-item.zz-right .zz-dot { left: -40px; right: auto; transform: translateX(-50%); top: 24px; }
 }
-.factors-label {
-  display: block;
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--violet);
-  margin-bottom: 6px;
-}
-.factors ul {
-  list-style: none;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 5px;
-}
-.factors li {
-  font-size: 13px;
-  color: var(--text-secondary);
-  padding-left: 16px;
+
+.zz-item.zz-strongest .flip-card { box-shadow: 0 0 0 2px var(--g4), var(--shadow); }
+
+/* ---------- Flip card ---------- */
+.flip-card { perspective: 1400px; min-height: 330px; }
+.flip-inner {
   position: relative;
+  width: 100%; height: 100%; min-height: 330px;
+  transition: transform 0.6s cubic-bezier(.4,.2,.2,1);
+  transform-style: preserve-3d;
 }
-.factors li::before {
-  content: "✦";
-  position: absolute;
-  left: 0;
-  color: var(--teal);
-  font-size: 11px;
+.flip-card:hover .flip-inner,
+.flip-card.is-flipped .flip-inner { transform: rotateY(180deg); }
+
+.flip-front, .flip-back {
+  position: absolute; inset: 0;
+  backface-visibility: hidden;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 18px 20px;
+  overflow-y: auto;
+  text-align: left;
+  cursor: pointer;
 }
-@media (min-width: 560px) {
-  .factors ul { grid-template-columns: 1fr 1fr; }
-}
+.flip-back { transform: rotateY(180deg); background: var(--subtle-bg); }
+
+.job-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 6px; }
+.job-head h3 { font-size: 15.5px; font-weight: 700; }
+.job-date { font-size: 12px; color: var(--text-muted); font-weight: 600; white-space: nowrap; }
+.job-company { font-size: 13px; font-weight: 700; color: var(--accent); margin-top: 2px; }
+.job-location { font-size: 11.5px; color: var(--text-muted); margin: 2px 0 8px; }
+.flip-front p { font-size: 13.5px; color: var(--text-secondary); margin: 4px 0 10px; }
+.flip-hint { display: block; font-size: 10.5px; color: var(--text-muted); font-style: italic; }
+
+.factors-label { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); margin-bottom: 8px; }
+.flip-back ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.flip-back li { font-size: 12.5px; color: var(--text-secondary); padding-left: 16px; position: relative; }
+.flip-back li::before { content: "✓"; position: absolute; left: 0; color: var(--g4); font-weight: 700; }
 
 /* ---------- Education ---------- */
 .edu-grid { display: flex; flex-direction: column; gap: 20px; }
 .edu-grid h3 { font-size: 13.5px; font-weight: 700; margin-bottom: 8px; color: var(--text-primary); }
 .edu-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-.edu-list li {
-  color: var(--text-secondary);
-  font-size: 14.5px;
-  padding-left: 22px;
-  position: relative;
-}
-.edu-list li::before {
-  content: "🎓";
-  position: absolute;
-  left: 0;
-  top: 0;
-  font-size: 13px;
-}
-@media (min-width: 640px) {
-  .edu-grid { flex-direction: row; }
-  .edu-grid > div { flex: 1; }
-}
+.edu-list li { color: var(--text-secondary); font-size: 14.5px; padding-left: 22px; position: relative; }
+.edu-list li::before { content: "🎓"; position: absolute; left: 0; top: 0; font-size: 13px; }
+@media (min-width: 640px) { .edu-grid { flex-direction: row; } .edu-grid > div { flex: 1; } }
 
 /* ---------- Footer ---------- */
-footer {
-  text-align: center;
-  padding: 24px 20px 40px;
-  color: var(--text-muted);
-  font-size: 13px;
-}
-footer a { color: var(--teal); text-decoration: none; }
+footer { text-align: center; padding: 24px 20px 40px; color: var(--text-muted); font-size: 13px; }
+footer a { color: var(--accent); text-decoration: none; }
 footer a:hover { text-decoration: underline; }
-
