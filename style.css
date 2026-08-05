@@ -111,9 +111,17 @@ body {
   color: #fff;
   padding: 90px 0 70px;
   text-align: center;
-  min-height: 60vh;
+  /* min(), not a bare vh — mobile browsers resize the visible viewport as the
+     address bar collapses/expands, which can otherwise leave dead space or
+     push content below the fold on first paint. Capped so it never forces
+     more empty height than the content actually needs. */
+  min-height: min(60vh, 480px);
   display: flex;
   align-items: center;
+}
+
+@media (max-width: 480px) {
+  .hero { min-height: auto; padding: 64px 0 48px; }
 }
 
 .hero-bg { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
@@ -209,12 +217,20 @@ body {
 /* ---------- Scroll-reveal sections ---------- */
 main.wrap { padding-top: 32px; padding-bottom: 60px; }
 
+/* Content is visible by default — the fade/slide-in only ever activates once
+   JS has confirmed (via .js-reveal on <html>) that it can reliably reverse it.
+   This way a mobile browser quirk that stops the reveal from firing just means
+   "no animation," never "invisible resume." */
 .reveal {
+  opacity: 1;
+  transform: none;
+}
+html.js-reveal .reveal {
   opacity: 0;
   transform: translateY(28px);
   transition: opacity 0.6s ease, transform 0.6s ease;
 }
-.reveal.in-view {
+html.js-reveal .reveal.in-view {
   opacity: 1;
   transform: translateY(0);
 }
