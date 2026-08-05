@@ -343,11 +343,15 @@ button:focus-visible {
   border-color: var(--color-hero-accent-solid);
   transform: translateY(-2px);
 }
-.hero-btn-icon { width: var(--size-icon-md); height: var(--size-icon-md); object-fit: contain; flex-shrink: 0; }
-/* GitHub's mark ships as solid black; invert to white so it reads against the
-   permanently-dark hero surface. LinkedIn's mark is a self-contained color
-   badge and stays as-is. */
-.hero-btn-icon--mono { filter: brightness(0) invert(1); }
+.hero-btn-icon {
+  width: var(--size-icon-md); height: var(--size-icon-md); flex-shrink: 0;
+  border-radius: var(--radius-circle);
+  background: var(--palette-white);
+}
+/* GitHub ships as an inline SVG so its fill is under our control; LinkedIn's
+   own square badge is cropped to the circle via object-fit. */
+svg.hero-btn-icon { padding: var(--space-1); box-sizing: border-box; fill: var(--palette-gray-900); }
+img.hero-btn-icon { object-fit: cover; }
 
 .reveal-in { opacity: 0; transform: translateY(var(--space-4)); animation: revealIn 0.7s ease forwards; animation-delay: var(--rd, 0s); }
 @keyframes revealIn { to { opacity: 1; transform: translateY(0); } }
