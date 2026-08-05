@@ -243,6 +243,7 @@ html.js-reveal .reveal.in-view {
   box-shadow: var(--shadow);
   padding: 26px 28px;
   margin-bottom: 20px;
+  cursor: default;
   transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.2s ease, border-color 0.2s ease;
 }
 .card:hover { transform: translateY(-3px); box-shadow: 0 4px 10px rgba(22,48,92,0.08), 0 16px 32px rgba(22,48,92,0.08); }
@@ -273,12 +274,15 @@ html.js-reveal .reveal.in-view {
   font-weight: 600;
   padding: 5px 12px;
   border-radius: 999px;
+  cursor: default;
   transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease;
 }
 .tag:hover {
   transform: translateY(-2px) scale(1.05);
   background: var(--teal);
-  color: #fff;
+  /* dark, fixed-contrast text — var(--teal) is a bright/light cyan in dark
+     mode, so white text on it was low-contrast and hard to read */
+  color: var(--navy-deep);
 }
 
 /* ---------- Experience timeline ---------- */
