@@ -14,10 +14,6 @@
 <div class="progress-bar" id="progress-bar"></div>
 <button id="theme-toggle" aria-label="Toggle dark/light theme" title="Toggle theme">🌓</button>
 
-<div class="mascot" id="mascot" aria-hidden="true">
-  <img id="mascot-img" src="img/cat-frames/cat-07.png" alt="" />
-</div>
-
 <header class="hero">
   <div class="hero-photo" id="hero-photo" aria-hidden="true"></div>
   <div class="hero-overlay" aria-hidden="true"></div>
@@ -41,7 +37,7 @@
 
 <main class="page-wrap">
 
-  <section class="card reveal" id="about" data-mascot-corner="top-right">
+  <section class="card reveal" id="about">
     <h2>About Me</h2>
     <div class="about-layout">
       <img class="profile-photo" src="img/Profile.jpg" alt="David Hernandez" />
@@ -124,7 +120,7 @@ problem solving, and cross functional collaboration in dynamic environments.</p>
     <div class="zigzag">
       <svg class="zz-svg" viewBox="0 0 40 1000" preserveAspectRatio="none" aria-hidden="true">
         <defs>
-          <linearGradient id="zzGrad" x1="0" y1="0" x2="0" y2="1">
+          <linearGradient id="zzGrad" x1="0" y1="1" x2="0" y2="0">
             <stop offset="0%" style="stop-color: var(--color-scale-1)" />
             <stop offset="35%" style="stop-color: var(--color-scale-2)" />
             <stop offset="65%" style="stop-color: var(--color-scale-3)" />
@@ -135,26 +131,26 @@ problem solving, and cross functional collaboration in dynamic environments.</p>
               stroke="url(#zzGrad)" stroke-width="3.5" fill="none" stroke-linecap="round" />
       </svg>
 
-      <!-- Chronological ascending: weakest (earliest) to strongest (most recent) -->
+      <!-- Reverse chronological: strongest (most recent) at top, weakest (earliest) at bottom -->
 
-      <div class="zz-item zz-left" style="--strength: 0.15">
+      <div class="zz-item zz-left zz-strongest" style="--strength: 1">
         <div class="zz-row">
           <div class="zz-col zz-col-a">
           <div class="job-card">
             <div class="job-head">
               <div class="job-title-group">
-                <img class="job-logo" src="img/teleperformance-logo.png" alt="" />
+                <img class="job-logo" src="img/spreetail-logo.jpg" alt="" />
                 <div>
-                  <h3>Jr RPA Developer</h3>
-                  <div class="job-company">Teleperformance</div>
+                  <h3>Business Automation Expert</h3>
+                  <div class="job-company">Spreetail</div>
                 </div>
               </div>
-              <span class="job-date">Jan 2019 – Feb 2022</span>
+              <span class="job-date">Jul 2025 – July2026</span>
             </div>
-            <div class="job-location">🇨🇴 Remote - Colombia</div>
-            <p>Developed bot using Automation Anywhere v11 and 360, UI Path, integrating both
-platforms with multiple CRMS, SQL, API, Error handling and SMTP for email integrations
-and notifications.</p>
+            <div class="job-location">🇺🇸 Remote Freelance - US</div>
+            <p>Created bots with database, excel, email, browser and API integrations in Power
+Automate. Created AI Integrations with Cursor and Claude to keep myself accountable
+with my support and enhancement activities for bots and processes in production.</p>
             <button class="factors-btn" type="button" aria-expanded="false">🔍 Success Factors</button>
           </div>
           </div>
@@ -163,10 +159,87 @@ and notifications.</p>
           <div class="factors-card">
             <span class="factors-label">Success Factors</span>
             <ul>
-              <li>Bot development</li>
-              <li>Documentation</li>
-              <li>Integration with multiple platforms for automation</li>
-              <li>Dashboard integrations with PBI</li>
+              <li>Leadership on Production Support</li>
+              <li>Creation of a Ticketing System</li>
+              <li>Bot development with AI Integration on Power Automate</li>
+              <li>Architecture for Framework on Power Automate</li>
+              <li>RPA analisys and documentation for bot development</li>
+              <li>Client Management</li>
+              <li>Dashboard and Metrics on PBI</li>
+            </ul>
+          </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="zz-item zz-right" style="--strength: 0.78">
+        <div class="zz-row">
+          <div class="zz-col zz-col-a">
+          <div class="factors-card">
+            <span class="factors-label">Success Factors</span>
+            <ul>
+              <li>Framework Integration</li>
+              <li>Bot development with reusable capabilities</li>
+              <li>API and JSON management to send information for reusable bots</li>
+              <li>Client Management</li>
+            </ul>
+          </div>
+          </div>
+          <div class="zz-connector"><span class="zz-dot"></span></div>
+          <div class="zz-col zz-col-b">
+          <div class="job-card">
+            <div class="job-head">
+              <div class="job-title-group">
+                <img class="job-logo" src="img/automation-anywhere-logo.jpg" alt="" />
+                <div>
+                  <h3>Automation Expert</h3>
+                  <div class="job-company">Automation Anywhere</div>
+                </div>
+              </div>
+              <span class="job-date">Nov 2024 – June 2025</span>
+            </div>
+            <div class="job-location">🇺🇸 Remote Freelance - US</div>
+            <p>Created bots with database, excel, email, browser and API integrations in Automation
+Anywhere 360, worked reusable structures to enhance the bot creation and decrease the
+development time to send bots to send bots to production. Worked with framework
+integrations.</p>
+            <button class="factors-btn" type="button" aria-expanded="false">🔍 Success Factors</button>
+          </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="zz-item zz-left" style="--strength: 0.55">
+        <div class="zz-row">
+          <div class="zz-col zz-col-a">
+          <div class="job-card">
+            <div class="job-head">
+              <div class="job-title-group">
+                <img class="job-logo" src="img/ntt-logo.jpg" alt="" />
+                <div>
+                  <h3>RPA Analyst</h3>
+                  <div class="job-company">NTT DATA</div>
+                </div>
+              </div>
+              <span class="job-date">Dec 2022 – Sept 2024</span>
+            </div>
+            <div class="job-location">🇨🇴 Remote - Colombia</div>
+            <p>Developed bots with integrations across databases, Excel, email, browsers, and APIs
+using Automation Anywhere 360, Bizagi and UI Path. Created reusable bot structures to
+support multiple business processes efficiently and performed maintenance activities for
+bots in production.</p>
+            <button class="factors-btn" type="button" aria-expanded="false">🔍 Success Factors</button>
+          </div>
+          </div>
+          <div class="zz-connector"><span class="zz-dot"></span></div>
+          <div class="zz-col zz-col-b">
+          <div class="factors-card">
+            <span class="factors-label">Success Factors</span>
+            <ul>
+              <li>Framework Integration</li>
+              <li>Bot development with reusable capabilities</li>
+              <li>Dashboards for metrics and meetings with stakeholders on PBI</li>
+              <li>Client Management</li>
             </ul>
           </div>
           </div>
@@ -211,25 +284,24 @@ development.</p>
         </div>
       </div>
 
-      <div class="zz-item zz-left" style="--strength: 0.55">
+      <div class="zz-item zz-left" style="--strength: 0.15">
         <div class="zz-row">
           <div class="zz-col zz-col-a">
           <div class="job-card">
             <div class="job-head">
               <div class="job-title-group">
-                <img class="job-logo" src="img/ntt-logo.jpg" alt="" />
+                <img class="job-logo" src="img/teleperformance-logo.png" alt="" />
                 <div>
-                  <h3>RPA Analyst</h3>
-                  <div class="job-company">NTT DATA</div>
+                  <h3>Jr RPA Developer</h3>
+                  <div class="job-company">Teleperformance</div>
                 </div>
               </div>
-              <span class="job-date">Dec 2022 – Sept 2024</span>
+              <span class="job-date">Jan 2019 – Feb 2022</span>
             </div>
             <div class="job-location">🇨🇴 Remote - Colombia</div>
-            <p>Developed bots with integrations across databases, Excel, email, browsers, and APIs
-using Automation Anywhere 360, Bizagi and UI Path. Created reusable bot structures to
-support multiple business processes efficiently and performed maintenance activities for
-bots in production.</p>
+            <p>Developed bot using Automation Anywhere v11 and 360, UI Path, integrating both
+platforms with multiple CRMS, SQL, API, Error handling and SMTP for email integrations
+and notifications.</p>
             <button class="factors-btn" type="button" aria-expanded="false">🔍 Success Factors</button>
           </div>
           </div>
@@ -238,86 +310,10 @@ bots in production.</p>
           <div class="factors-card">
             <span class="factors-label">Success Factors</span>
             <ul>
-              <li>Framework Integration</li>
-              <li>Bot development with reusable capabilities</li>
-              <li>Dashboards for metrics and meetings with stakeholders on PBI</li>
-              <li>Client Management</li>
-            </ul>
-          </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="zz-item zz-right" style="--strength: 0.78">
-        <div class="zz-row">
-          <div class="zz-col zz-col-a">
-          <div class="factors-card">
-            <span class="factors-label">Success Factors</span>
-            <ul>
-              <li>Framework Integration</li>
-              <li>Bot development with reusable capabilities</li>
-              <li>API and JSON management to send information for reusable bots</li>
-              <li>Client Management</li>
-            </ul>
-          </div>
-          </div>
-          <div class="zz-connector"><span class="zz-dot"></span></div>
-          <div class="zz-col zz-col-b">
-          <div class="job-card">
-            <div class="job-head">
-              <div class="job-title-group">
-                <img class="job-logo" src="img/automation-anywhere-logo.jpg" alt="" />
-                <div>
-                  <h3>Automation Expert</h3>
-                  <div class="job-company">Automation Anywhere</div>
-                </div>
-              </div>
-              <span class="job-date">Nov 2024 – June 2025</span>
-            </div>
-            <div class="job-location">🇺🇸 Remote Freelance - US</div>
-            <p>Created bots with database, excel, email, browser and API integrations in Automation
-Anywhere 360, worked reusable structures to enhance the bot creation and decrease the
-development time to send bots to send bots to production. Worked with framework
-integrations.</p>
-            <button class="factors-btn" type="button" aria-expanded="false">🔍 Success Factors</button>
-          </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="zz-item zz-left zz-strongest" style="--strength: 1">
-        <div class="zz-row">
-          <div class="zz-col zz-col-a">
-          <div class="job-card">
-            <div class="job-head">
-              <div class="job-title-group">
-                <img class="job-logo" src="img/spreetail-logo.jpg" alt="" />
-                <div>
-                  <h3>Business Automation Expert</h3>
-                  <div class="job-company">Spreetail</div>
-                </div>
-              </div>
-              <span class="job-date">Jul 2025 – July2026</span>
-            </div>
-            <div class="job-location">🇺🇸 Remote Freelance - US</div>
-            <p>Created bots with database, excel, email, browser and API integrations in Power
-Automate. Created AI Integrations with Cursor and Claude to keep myself accountable
-with my support and enhancement activities for bots and processes in production.</p>
-            <button class="factors-btn" type="button" aria-expanded="false">🔍 Success Factors</button>
-          </div>
-          </div>
-          <div class="zz-connector"><span class="zz-dot"></span></div>
-          <div class="zz-col zz-col-b">
-          <div class="factors-card">
-            <span class="factors-label">Success Factors</span>
-            <ul>
-              <li>Leadership on Production Support</li>
-              <li>Creation of a Ticketing System</li>
-              <li>Bot development with AI Integration on Power Automate</li>
-              <li>Architecture for Framework on Power Automate</li>
-              <li>RPA analisys and documentation for bot development</li>
-              <li>Client Management</li>
-              <li>Dashboard and Metrics on PBI</li>
+              <li>Bot development</li>
+              <li>Documentation</li>
+              <li>Integration with multiple platforms for automation</li>
+              <li>Dashboard integrations with PBI</li>
             </ul>
           </div>
           </div>

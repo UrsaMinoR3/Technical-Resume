@@ -111,8 +111,6 @@
   --size-touch-target: 44px; /* WCAG minimum target size */
   --size-avatar-sm: 128px;
   --size-avatar-lg: 144px;
-  --size-mascot: 64px;
-  --size-mascot-inner: 52px;
   --size-icon-sm: 14px;
   --size-icon-md: 18px;
   --size-logo: 36px;
@@ -134,14 +132,12 @@
 
   /* ---- motion ----
      200ms is the ceiling for state-communicating micro-interactions
-     (hover, focus, press). Two documented exceptions are not micro-
-     interactions: the accordion moves real content into view, and the
-     mascot's travel time is what makes it read as walking rather than
-     teleporting — both are intentional, not oversights. */
+     (hover, focus, press). One documented exception is not a micro-
+     interaction: the accordion moves real content into view, which
+     is intentional, not an oversight. */
   --duration-fast: 150ms;
   --duration-base: 200ms;
   --duration-panel: 350ms;
-  --duration-mascot-travel: 750ms;
   --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
 
   /* ---- z-index scale ---- */
@@ -150,7 +146,6 @@
   --z-content: 2;
   --z-chrome: 20;
   --z-progress: 25;
-  --z-mascot: 40;
 }
 
 :root[data-theme="dark"] {
@@ -241,46 +236,6 @@ button:focus-visible {
   transition: transform var(--duration-base) var(--ease-standard);
 }
 #theme-toggle:hover { transform: scale(1.08) rotate(15deg); }
-
-/* ============================================================
-   Mascot — the pixel cat. Fixed-position, wanders between the
-   corners of visible content elements and jumps straight to
-   whatever's hovered. Pure decoration (aria-hidden), never gates
-   or blocks content, and is explicitly kept out of range of real
-   interactive controls (see script.js TARGET_SELECTOR) so it can
-   never visually sit on top of something the user is about to
-   click.
-   ============================================================ */
-.mascot {
-  position: fixed;
-  top: 0; left: 0;
-  width: var(--size-mascot);
-  height: var(--size-mascot);
-  z-index: var(--z-mascot);
-  pointer-events: none;
-  opacity: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* a soft backdrop so a light-colored cat pose stays legible over both
-     the dark hero photo and the page background, instead of blending in */
-  background: radial-gradient(circle, color-mix(in srgb, var(--color-bg-surface) 75%, transparent) 0%, transparent 72%);
-  transform: translate(-1000px, -1000px);
-  transition: transform var(--duration-mascot-travel) var(--ease-standard), opacity var(--duration-panel) ease;
-}
-.mascot.is-visible { opacity: 1; }
-.mascot img {
-  /* fixed box + contain — the 25 source poses all crop to different
-     aspect ratios, so a bare width:100%/height:auto let some look
-     stretched or oddly proportioned next to each other */
-  max-width: var(--size-mascot-inner);
-  max-height: var(--size-mascot-inner);
-  width: auto;
-  height: auto;
-  display: block;
-  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.35));
-}
-.mascot.is-flipped img { transform: scaleX(-1); }
 
 /* ---------- Hero (real photo parallax) ---------- */
 .hero {
