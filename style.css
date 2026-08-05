@@ -141,6 +141,7 @@
   --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
 
   /* ---- z-index scale ---- */
+  --z-ambient: -1;
   --z-svg: 0;
   --z-item: 1;
   --z-content: 2;
@@ -217,6 +218,52 @@ button:focus-visible {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+}
+
+/* ---------- Ambient background blobs ----------
+   Pure decoration, fixed to the viewport and pinned behind every
+   other element (--z-ambient sits below the whole z-index scale).
+   Fills the empty margin space beside the centered content on wide
+   viewports with a slow drifting glow. Colors are reused straight
+   from the accent + contribution-graph scale tokens -- no new
+   palette values introduced. Wherever real content (the hero photo,
+   any .card) has its own opaque background, it fully occludes this
+   layer, so it never competes with foreground contrast. Motion is
+   covered by the global prefers-reduced-motion kill switch above. */
+.ambient-bg {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-ambient);
+  overflow: hidden;
+  pointer-events: none;
+}
+.ambient-blob {
+  position: absolute;
+  width: 44vmax;
+  height: 44vmax;
+  border-radius: var(--radius-circle);
+  background: var(--color-accent);
+  filter: blur(90px);
+  opacity: 0.32;
+  animation: ambientDrift 26s var(--ease-standard) infinite alternate;
+}
+.ambient-blob-1 { top: -14vmax; left: -16vmax; }
+.ambient-blob-2 {
+  bottom: -18vmax; right: -14vmax;
+  background: var(--color-scale-4);
+  animation-duration: 32s;
+  animation-delay: -9s;
+}
+.ambient-blob-3 {
+  top: 38vh; right: -20vmax;
+  background: var(--color-scale-2);
+  animation-duration: 38s;
+  animation-delay: -20s;
+}
+@keyframes ambientDrift {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(7vmax, -9vmax) scale(1.15); }
+  100% { transform: translate(-5vmax, 8vmax) scale(0.92); }
 }
 
 /* ---------- Scroll progress bar ---------- */
