@@ -24,6 +24,8 @@
   try {
     const progressBar = document.getElementById("progress-bar");
     const heroPhoto = document.getElementById("hero-photo");
+    const backToTop = document.getElementById("back-to-top");
+    const BACK_TO_TOP_THRESHOLD = 400;
 
     function updateProgress() {
       if (!progressBar) return;
@@ -39,12 +41,18 @@
       heroPhoto.style.transform = `scale(1.12) translateY(${scrollTop * 0.22}px)`;
     }
 
+    function updateBackToTop() {
+      if (!backToTop) return;
+      backToTop.classList.toggle("is-idle", window.scrollY < BACK_TO_TOP_THRESHOLD);
+    }
+
     let ticking = false;
     function onScroll() {
       if (!ticking) {
         requestAnimationFrame(() => {
           updateProgress();
           updateParallax();
+          updateBackToTop();
           ticking = false;
         });
         ticking = true;
@@ -53,6 +61,7 @@
     window.addEventListener("scroll", onScroll, { passive: true });
     updateProgress();
     updateParallax();
+    updateBackToTop();
   } catch (e) { /* purely decorative */ }
 
   /* ---------- Scroll-reveal sections (fail-safe: visible by default) ---------- */

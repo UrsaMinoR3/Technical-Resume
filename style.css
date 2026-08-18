@@ -396,6 +396,27 @@ button:focus-visible {
 }
 #theme-toggle:hover { transform: scale(1.08) rotate(15deg); }
 
+/* ---------- Back to top ----------
+   Plain <a href="#top"> to a real id on <body> -- works with zero JS,
+   since scroll-behavior: smooth is already set globally on html (and
+   already respects prefers-reduced-motion via the kill switch above).
+   Fail-safe default is VISIBLE (same principle as .reveal): JS only
+   ever adds .is-idle to hide it near the top of the page, so if JS
+   never runs the button simply stays put instead of disappearing. */
+.back-to-top {
+  position: fixed; bottom: var(--space-4); right: var(--space-4); z-index: var(--z-chrome);
+  width: var(--size-touch-target); height: var(--size-touch-target); border-radius: var(--radius-circle);
+  border: 1px solid var(--color-border); background: var(--color-bg-surface);
+  color: var(--color-text-primary); box-shadow: var(--shadow-elevated);
+  display: flex; align-items: center; justify-content: center;
+  text-decoration: none;
+  opacity: 1; transform: translateY(0);
+  transition: opacity var(--duration-base) var(--ease-standard), transform var(--duration-base) var(--ease-standard);
+}
+.back-to-top:hover { transform: translateY(-3px); }
+.back-to-top.is-idle { opacity: 0; pointer-events: none; transform: translateY(8px); }
+.back-to-top-icon { width: var(--size-icon-md); height: var(--size-icon-md); fill: currentColor; }
+
 /* ---------- Hero (real photo parallax) ---------- */
 .hero {
   position: relative;
