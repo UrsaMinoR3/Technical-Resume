@@ -665,7 +665,11 @@ html.js-reveal .reveal.in-view { opacity: 1; transform: translateY(0); }
 .factors-card li::before { content: "✓"; position: absolute; left: 0; color: var(--color-scale-4); font-weight: var(--weight-bold); }
 
 /* ---------- Personal Projects ---------- */
-.project-grid { display: flex; flex-direction: column; gap: var(--space-4); }
+.project-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-4); align-items: start;
+}
+.project-card { display: flex; flex-direction: column; }
 .project-head { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: var(--space-3); margin-bottom: var(--space-2); }
 .project-head h3 { font-size: var(--text-base); font-weight: var(--weight-bold); }
 .project-card p { font-size: var(--text-sm); color: var(--color-text-secondary); margin-bottom: var(--space-3); }
@@ -676,12 +680,30 @@ html.js-reveal .reveal.in-view { opacity: 1; transform: translateY(0); }
 }
 .project-link:hover { text-decoration: underline; }
 .project-link-icon { width: var(--size-icon-sm); height: var(--size-icon-sm); fill: currentColor; flex-shrink: 0; }
-.tech-tags { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.project-status { font-size: var(--text-xs); font-weight: var(--weight-bold); color: var(--color-text-muted); white-space: nowrap; }
+.tech-tags { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: auto; }
 .tech-tag {
   font-size: var(--text-xs); font-weight: var(--weight-medium); color: var(--color-text-secondary);
   background: var(--color-bg-surface-subtle); border: 1px solid var(--color-border);
   padding: var(--space-1) var(--space-3); border-radius: var(--radius-sm);
 }
+
+/* Preview-card variant: a live screenshot thumbnail that "reveals" (full
+   color + slight zoom) on hover, dimmed/desaturated at rest so it reads as
+   a preview rather than competing with the card's own text for attention. */
+.project-card--has-preview { padding: 0; overflow: hidden; }
+.project-preview {
+  display: block; position: relative; aspect-ratio: 16 / 10; overflow: hidden;
+  background: var(--color-bg-surface-subtle); border-bottom: 1px solid var(--color-border);
+}
+.project-preview img {
+  width: 100%; height: 100%; object-fit: cover; object-position: top;
+  filter: grayscale(55%) brightness(0.8); transform: scale(1.03);
+  transition: filter var(--duration-panel) var(--ease-standard), transform var(--duration-panel) var(--ease-standard);
+}
+.project-card--has-preview:hover .project-preview img,
+.project-preview:focus-visible img { filter: grayscale(0%) brightness(1); transform: scale(1.08); }
+.project-body { padding: var(--space-4) var(--space-5); display: flex; flex-direction: column; flex: 1; }
 
 /* ---------- Education ---------- */
 .edu-grid { display: flex; flex-direction: column; gap: var(--space-5); }
