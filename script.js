@@ -69,7 +69,7 @@
      threshold fires once N% of the TARGET's own area is visible, which
      is target-height-dependent: a short card (About) crosses 10% of its
      own height after only a few px of scroll, while a very tall card
-     (Experience, with the whole zigzag timeline inside it) needs far
+     (Experience, with the whole vertical timeline inside it) needs far
      more scroll before 10% of its much larger height is visible. Since
      the split layout's pinned and scroll columns start at the identical
      document Y (same grid row), that mismatch was the root cause of the
@@ -154,63 +154,61 @@
     }
   } catch (e) { /* CSS default keeps the column in normal static grid flow */ }
 
-  /* ---------- Experience: dynamic path (scroll-driven line draw + "you are here") ----------
-     The SVG line is drawn in proportion to how far the user has actually
-     scrolled through the Experience section (a real progress read-out,
-     not a fixed-duration animation), and whichever role card is nearest
-     the viewport center gets a live "active" highlight — turning the
-     static zigzag into something that visibly responds to scrolling,
-     which is what "dynamic path" means here. Both behaviors are no-ops
-     under prefers-reduced-motion: the path simply renders fully drawn
-     and no card is force-highlighted, so nothing moves on its own. */
+  /* ---------- Experience: dynamic line (scroll-driven fill + "you are here") ----------
+     The left-edge accent line fills in proportion to how far the user
+     has actually scrolled through the Experience section (a real
+     progress read-out, not a fixed-duration animation) via a cheap
+     transform: scaleY() on .exp-line-fill — GPU-composited, no layout
+     or paint cost per frame, replacing the old SVG stroke-dashoffset
+     path draw now that the timeline is a single vertical column instead
+     of a zigzag. Whichever role card is nearest the viewport center
+     gets a live "active" highlight, unchanged in concept from before.
+     Both behaviors are no-ops under prefers-reduced-motion: the line
+     simply renders fully filled and no card is force-highlighted, so
+     nothing moves on its own. */
   try {
     const experienceSection = document.getElementById("experience");
-    const zzPath = document.getElementById("zzPath");
-    const zzItems = document.querySelectorAll(".zz-item");
+    const expLineFill = document.getElementById("expLineFill");
+    const expItems = document.querySelectorAll(".exp-item");
 
-    if (experienceSection && zzPath && "getTotalLength" in zzPath) {
-      const pathLength = zzPath.getTotalLength();
-
+    if (experienceSection && expLineFill) {
       if (reduceMotion) {
-        zzPath.style.strokeDasharray = "none";
-        zzPath.style.strokeDashoffset = "0";
+        expLineFill.style.transform = "scaleY(1)";
       } else {
-        zzPath.style.strokeDasharray = String(pathLength);
-
-        function updateExperiencePath() {
+        function updateExperienceLine() {
           const rect = experienceSection.getBoundingClientRect();
           const winH = window.innerHeight;
           const total = rect.height + winH;
           const passed = winH - rect.top;
           const progress = Math.min(1, Math.max(0, passed / total));
-          zzPath.style.strokeDashoffset = String(pathLength * (1 - progress));
+          expLineFill.style.transform = `scaleY(${progress})`;
         }
 
         function updateActiveRole() {
-          if (!zzItems.length) return;
+          if (!expItems.length) return;
           const viewportCenter = window.innerHeight / 2;
           let closest = null;
           let closestDist = Infinity;
-          zzItems.forEach((item) => {
+          expItems.forEach((item) => {
             const card = item.querySelector(".job-card");
             if (!card) return;
             const cardRect = card.getBoundingClientRect();
             if (cardRect.bottom < 0 || cardRect.top > window.innerHeight) {
-              item.classList.remove("zz-active");
+              item.classList.remove("is-active");
               return;
             }
             const cardCenter = cardRect.top + cardRect.height / 2;
             const dist = Math.abs(cardCenter - viewportCenter);
             if (dist < closestDist) { closestDist = dist; closest = item; }
           });
-          zzItems.forEach((item) => item.classList.toggle("zz-active", item === closest));
+          expItems.forEach((item) => item.classList.toggle("is-active", item === closest));
         }
 
         let expTicking = false;
         function onExperienceScroll() {
           if (!expTicking) {
             requestAnimationFrame(() => {
-              updateExperiencePath();
+              updateExperienceLine();
               updateActiveRole();
               expTicking = false;
             });
@@ -219,11 +217,11 @@
         }
         window.addEventListener("scroll", onExperienceScroll, { passive: true });
         window.addEventListener("resize", onExperienceScroll, { passive: true });
-        updateExperiencePath();
+        updateExperienceLine();
         updateActiveRole();
       }
     }
-  } catch (e) { /* the static zigzag layout already works with no JS */ }
+  } catch (e) { /* the static vertical timeline already works with no JS */ }
 
   /* ---------- Sticky action bar: reveal once scrolled past the hero ---------- */
   try {
@@ -252,11 +250,11 @@
     }
   } catch (e) { /* the hero's own links already cover this functionality */ }
 
-  /* ---------- Success Factors: button opens/closes the card on the other side ---------- */
+  /* ---------- Success Factors: button opens/closes its own inline panel ---------- */
   try {
     document.querySelectorAll(".factors-btn").forEach((btn) => {
       btn.addEventListener("click", () => {
-        const item = btn.closest(".zz-item");
+        const item = btn.closest(".exp-item");
         if (!item) return;
         const open = item.classList.toggle("factors-open");
         btn.setAttribute("aria-expanded", open ? "true" : "false");

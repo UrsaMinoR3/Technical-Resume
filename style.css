@@ -220,7 +220,7 @@
    RESET & BASE
    ============================================================ */
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; overflow-x: hidden; }
 body {
   background: var(--color-bg-page);
   color: var(--color-text-primary);
@@ -229,8 +229,15 @@ body {
   line-height: var(--leading-normal);
   transition: background var(--duration-base) ease, color var(--duration-base) ease;
   overflow-x: hidden;
+  overflow-wrap: break-word;
 }
 .wrap { max-width: 860px; margin: 0 auto; padding: 0 var(--space-6); position: relative; }
+
+/* Anchor targets (sticky-bar "Projects" link, any future in-page jump)
+   land below the fixed sticky bar instead of directly under it — the
+   bar sits var(--space-4) from the top at ~60px tall, so the offset
+   clears it with a little breathing room to spare. */
+section[id] { scroll-margin-top: calc(var(--space-4) * 2 + 60px); }
 
 /* Single, global focus style — every interactive element in the
    document is either an <a> or a <button>, so one rule covers all of
@@ -376,6 +383,17 @@ button:focus-visible {
   50%  { transform: translate(var(--drift), var(--rise)) scale(1.15); border-radius: 63% 37% 54% 46% / 40% 62% 38% 60%; }
   75%  { transform: translate(calc(var(--drift) * 0.4), calc(var(--rise) * 0.6)) scale(1); border-radius: 46% 54% 40% 60% / 55% 45% 55% 45%; }
   100% { transform: translate(0, 0) scale(0.9); border-radius: 42% 58% 63% 37% / 41% 38% 62% 59%; }
+}
+
+/* Mobile performance: fourteen infinitely-animating, blurred blobs are a
+   real GPU compositing cost on phone-class hardware (every frame has to
+   re-rasterize a large blurred region), and the ambient layer is purely
+   decorative — freezing it on narrow viewports (same visual as a single
+   static frame, same treatment prefers-reduced-motion already gets)
+   removes that cost where it's felt most without deleting the effect on
+   the desktop/tablet viewports it was actually designed for. */
+@media (max-width: 640px) {
+  .ambient-blob { animation: none; }
 }
 
 /* ---------- Scroll progress bar ---------- */
@@ -560,6 +578,13 @@ img.hero-btn-icon { object-fit: cover; }
   0%, 100% { transform: translate(0, 0) scale(1); }
   50% { transform: translate(6%, -8%) scale(1.15); }
 }
+/* Same mobile-performance reasoning as the ambient blobs above — these
+   three sit directly in the hero, the first thing painted on load, so
+   freezing them here is the highest-impact single fix for "the header
+   feels slow" on phones. */
+@media (max-width: 640px) {
+  .hero-mesh-blob { animation: none; }
+}
 
 /* ---------- Hero stats (quantified proof, à la nixtio's project counts) ----------
    Four real numbers pulled straight from the Experience section below —
@@ -655,9 +680,13 @@ img.hero-btn-icon { object-fit: cover; }
 /* ---------- Page shell ----------
    Two container widths for two kinds of content, not one flat max-width
    for everything: .page-wrap is the WIDE shell (dashboards/grids —
-   Experience's zigzag and Projects' card grid earn the extra room on a
-   wide monitor), while .card--narrow re-caps individual sections back
-   to a comfortable reading measure for prose (About, Education).
+   the Experience timeline and Projects' card grid earn the extra room
+   on a wide monitor), while .card--narrow re-caps the About card (photo
+   + short bio, prose-only) back to a comfortable reading measure. Every
+   other card in the scroll column — Skills, Experience, Projects,
+   Education — intentionally fills the column's full width, the same
+   width its siblings use, so no card reads as narrower/off-center than
+   the ones around it.
 
    .page-wrap is percentage-based (90% of viewport, ~5% margin per side)
    rather than a single fixed max-width, so it actually uses the screen
@@ -667,10 +696,20 @@ img.hero-btn-icon { object-fit: cover; }
    already produces at a 1920px viewport (1728px): every standard
    monitor up to "1920p-equivalent" gets the true 90% treatment, and
    only wider-than-that displays (2K/ultra-wide/4K+) hit the ceiling,
-   which keeps the zigzag/project-grid from stretching into unreadably
+   which keeps the timeline/project-grid from stretching into unreadably
    long rows on the very widest screens instead of scaling forever. */
 .page-wrap { width: 90%; max-width: 1760px; margin: 0 auto; padding: var(--space-9) var(--space-6) var(--space-10); }
 .card--narrow { max-width: 720px; margin-left: auto; margin-right: auto; }
+
+/* Phone-width tightening: the desktop shell's generous outer padding
+   (--space-9 top, --space-10 bottom) and card padding (--space-7) read
+   as excessive dead space on a 375–428px screen, where every pixel of
+   width matters more than on a laptop monitor — a deliberately smaller
+   rhythm for a small screen, not the desktop spacing shrunk uniformly. */
+@media (max-width: 640px) {
+  .page-wrap { padding: var(--space-6) var(--space-4) var(--space-7); }
+  .card { padding: var(--space-5); margin-bottom: var(--space-5); }
+}
 
 /* content visible by default; JS only ever adds the reveal animation on
    top once it's confirmed working (see script.js) */
@@ -796,16 +835,6 @@ html.js-reveal .reveal.in-view { opacity: 1; transform: translateY(0); }
   .split-layout-pinned .about-layout p { max-width: 46ch; }
 }
 
-/* Mirrors the old @media (max-width: 720px) viewport-width breakpoint, but
-   reacts to the scroll column's real width (the split-scroll container) so
-   the two-up zigzag correctly collapses to one column once the pinned
-   sidebar has actually eaten into its space, not just on small viewports. */
-@container split-scroll (max-width: 720px) {
-  .zz-row { grid-template-columns: 1fr; }
-  .zz-connector { display: none; }
-  .zz-svg { display: none; }
-}
-
 /* Mirrors the old @media (min-width: 980px) project-grid rule the same
    way: 930px is the content width at which the original rule started
    3-up cards (viewport 980px minus the page shell's 2×24px padding =
@@ -832,19 +861,12 @@ html.js-reveal .reveal.in-view { opacity: 1; transform: translateY(0); }
 }
 
 /* ---------- Technical Skills (scroll column) ----------
-   Lives in the wide scroll column now, not the narrow pinned card, so it
-   can use real horizontal room: a responsive grid of skill-groups instead
-   of one long stacked list. Reacts to the scroll column's own width via
-   the split-scroll container (same mechanism as the zigzag/project-grid
-   above) rather than the viewport, since that's the space actually
-   available once the fixed About column is in play. */
-.skills-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-6) var(--space-7); }
-@container split-scroll (min-width: 560px) {
-  .skills-grid { grid-template-columns: repeat(2, 1fr); }
-}
-@container split-scroll (min-width: 900px) {
-  .skills-grid { grid-template-columns: repeat(3, 1fr); }
-}
+   Single column at every width, by request — a vertical stack of labeled
+   skill-groups reads cleanly at any column width instead of reflowing
+   into a multi-column grid on wider viewports (a previous 2/3-up
+   container-query treatment was reverted; the plain list is the current
+   intended design, not a fallback). */
+.skills-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-6); }
 .skill-group { margin-bottom: var(--space-5); }
 .skills-grid .skill-group { margin-bottom: 0; }
 .skill-group:last-child { margin-bottom: 0; }
@@ -861,52 +883,70 @@ html.js-reveal .reveal.in-view { opacity: 1; transform: translateY(0); }
 .icon-item .icon { font-size: var(--size-icon-sm); }
 
 /* ============================================================
-   Zigzag experience timeline — each row is a 3-column grid (job
-   card | dot | Success Factors card), alternating which side the
-   job card sits on. A wavy SVG path — not a straight line — runs
-   behind everything, growing from faint to full accent-green as it
-   nears the present.
+   Experience timeline — a single vertical column, matching the
+   numbered-index card language Projects already established (01/02/03)
+   instead of the old two-column diagonal zigzag, which no longer had
+   room to breathe once Experience moved into the narrower scroll
+   column. A thin accent line runs down the left edge, behind the dot
+   markers, and fills in top-to-bottom as the user scrolls — the same
+   "line grows stronger toward today" concept as before, expressed as a
+   simple scaleY() fill instead of an SVG path draw (cheaper to update
+   every scroll frame, and reads just as clearly in a single column).
    ============================================================ */
-.zigzag { position: relative; padding: var(--space-3) 0; }
+.exp-timeline { position: relative; padding: var(--space-2) 0; }
 
-.zz-svg { position: absolute; inset: 0; width: 100%; height: 100%; z-index: var(--z-svg); }
-
-.zz-item { position: relative; z-index: var(--z-item); margin-bottom: var(--space-6); }
-.zz-item:last-child { margin-bottom: 0; }
-
-.zz-row {
-  display: grid;
-  grid-template-columns: 1fr var(--space-8) 1fr;
-  align-items: start;
+/* Track sits under the dots, not under the cards: 7px lines the line's
+   center up with the center of the --space-4 (16px) dot in .exp-marker,
+   whose own width is --space-4 with the dot centered inside it via
+   flex justify-content:center. */
+.exp-line {
+  position: absolute;
+  left: calc(var(--space-4) / 2 - 1px);
+  top: var(--space-2);
+  bottom: var(--space-2);
+  width: 2px;
+  background: var(--color-scale-0);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  z-index: var(--z-svg);
 }
-.zz-col { min-width: 0; }
-.zz-connector { display: flex; justify-content: center; padding-top: var(--space-6); }
+.exp-line-fill {
+  display: block;
+  width: 100%; height: 100%;
+  background: linear-gradient(to bottom, var(--color-scale-4), var(--color-scale-2));
+  transform: scaleY(0);
+  transform-origin: top;
+  border-radius: inherit;
+  transition: transform var(--duration-fast) linear;
+}
 
-.zz-dot {
+.exp-item { position: relative; z-index: var(--z-item); display: flex; gap: var(--space-4); margin-bottom: var(--space-5); }
+.exp-item:last-child { margin-bottom: 0; }
+
+.exp-marker { flex-shrink: 0; width: var(--space-4); display: flex; justify-content: center; padding-top: var(--space-5); }
+.exp-dot {
   width: var(--space-4); height: var(--space-4);
   border-radius: var(--radius-circle);
   /* plain fallback first — browsers without color-mix() just keep this
      instead of silently ending up with no background at all */
   background: var(--color-scale-3);
   background: color-mix(in srgb, var(--color-scale-4) calc(var(--strength) * 100%), var(--color-scale-0));
-  box-shadow: 0 0 0 var(--space-1) var(--color-bg-page);
-  box-shadow: 0 0 0 var(--space-1) var(--color-bg-page), 0 0 calc(var(--space-1) + 10px * var(--strength)) color-mix(in srgb, var(--color-scale-4) calc(var(--strength) * 80%), transparent);
+  box-shadow: 0 0 0 3px var(--color-bg-page);
+  transition: transform var(--duration-base) var(--ease-standard);
 }
+.exp-body { flex: 1; min-width: 0; }
 
-.zz-item.zz-strongest .job-card { box-shadow: 0 0 0 2px var(--color-scale-4); }
+.exp-index { display: block; font-size: var(--text-xs); font-weight: var(--weight-bold); color: var(--color-text-muted); letter-spacing: var(--tracking-label); margin-bottom: var(--space-1); }
 
-/* ---------- Dynamic path: scroll-driven line draw + "you are here" ----------
-   zzPath's stroke-dashoffset is driven directly from scroll position in
-   script.js (not a CSS animation) so the line's growth always matches
-   how far the user has actually scrolled through the section — a real
-   progress indicator, not a timed effect. zz-active marks whichever role
-   is currently centered in the viewport; it uses the accent color (an
-   interaction/reading-position signal) which is deliberately distinct
-   from the permanent scale-4 ring on the most recent role (a data/
-   recency signal), so the two never get visually confused. */
-.zz-dot { transition: transform var(--duration-base) var(--ease-standard); }
-.zz-item.zz-active .zz-dot { transform: scale(1.3); }
-.zz-item.zz-active .job-card {
+.exp-current .job-card { box-shadow: 0 0 0 2px var(--color-scale-4); }
+
+/* zz-active's replacement: whichever role is nearest the viewport
+   center gets a live "you are here" highlight (accent color — an
+   interaction/reading-position signal, deliberately distinct from the
+   permanent scale-4 ring on the current role above, a data/recency
+   signal, so the two never get visually confused). */
+.exp-item.is-active .exp-dot { transform: scale(1.3); }
+.exp-item.is-active .job-card {
   border-color: var(--color-accent);
   box-shadow: 0 0 0 2px var(--color-accent);
   transition: border-color var(--duration-base) ease, box-shadow var(--duration-base) ease;
@@ -959,34 +999,30 @@ html.js-reveal .reveal.in-view { opacity: 1; transform: translateY(0); }
   transition: background var(--duration-fast) ease, color var(--duration-fast) ease, transform var(--duration-fast) ease;
 }
 .factors-btn:hover { background: var(--color-accent-solid); color: var(--color-text-on-accent); transform: translateY(-1px); }
-.zz-item.factors-open .factors-btn { background: var(--color-accent-solid); color: var(--color-text-on-accent); }
+.exp-item.factors-open .factors-btn { background: var(--color-accent-solid); color: var(--color-text-on-accent); }
 
-/* Success Factors card — starts collapsed, the button opens/closes it
-   on the OTHER side of the row, so that side isn't empty once open. */
+/* Success Factors panel — nested inside the same job-card, directly
+   below its button, instead of "the other side" of a two-column row
+   (there is no other side in a single-column list). Starts collapsed. */
 .factors-card {
   background: var(--color-bg-surface-subtle);
   opacity: 0;
   max-height: 0;
+  margin-top: 0;
   padding-top: 0; padding-bottom: 0;
   overflow: hidden;
-  transform: scale(0.96);
-  transition: opacity var(--duration-panel) ease, transform var(--duration-panel) ease, max-height var(--duration-panel) ease, padding var(--duration-panel) ease;
+  transform: scale(0.98);
+  transition: opacity var(--duration-panel) ease, transform var(--duration-panel) ease, max-height var(--duration-panel) ease, padding var(--duration-panel) ease, margin var(--duration-panel) ease;
 }
-.zz-item.factors-open .factors-card {
+.exp-item.factors-open .factors-card {
   opacity: 1;
   /* 600px is an intentionally generous ceiling for the max-height
      transition trick, not a real content height — the list never
      gets close to it, it just needs to be larger than any real case. */
   max-height: 600px;
+  margin-top: var(--space-4);
   padding-top: var(--space-5); padding-bottom: var(--space-5);
   transform: scale(1);
-}
-/* Same collapse condition as the zz-row/zz-svg rule above — the stacked
-   Success Factors card needs the top margin the two-column layout gets
-   for free from .zz-connector's padding, once that connector is gone. */
-@container split-scroll (max-width: 720px) {
-  .factors-card { margin-top: 0; }
-  .zz-item.factors-open .factors-card { margin-top: var(--space-4); }
 }
 
 .factors-label { display: block; font-size: var(--text-xs); font-weight: var(--weight-bold); text-transform: uppercase; letter-spacing: var(--tracking-label); color: var(--color-accent); margin-bottom: var(--space-2); }
