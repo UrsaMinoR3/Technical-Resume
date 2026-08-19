@@ -34,9 +34,35 @@
   <svg class="back-to-top-icon" viewBox="0 0 16 16" aria-hidden="true"><path fill-rule="evenodd" d="M8 13.5a.75.75 0 0 0 .75-.75V4.56l3.22 3.22a.75.75 0 1 0 1.06-1.06l-4.5-4.5a.75.75 0 0 0-1.06 0l-4.5 4.5a.75.75 0 1 0 1.06 1.06L7.25 4.56v8.19a.75.75 0 0 0 .75.75Z"></path></svg>
 </a>
 
+<nav class="sticky-bar" id="sticky-bar" aria-label="Quick links">
+  <div class="sticky-bar-inner">
+    <a class="sticky-bar-link" href="https://github.com/UrsaMinoR3" target="_blank" rel="noopener">
+      <img class="sticky-bar-icon" src="img/github-logo.png" alt="" />
+      <span>GitHub</span>
+    </a>
+    <a class="sticky-bar-link" href="https://www.linkedin.com/in/david-hernandez-186559141/" target="_blank" rel="noopener">
+      <img class="sticky-bar-icon" src="img/linkedin-logo.webp" alt="" />
+      <span>LinkedIn</span>
+    </a>
+    <a class="sticky-bar-link" href="resume/David-Hernandez-Resume.pdf" download="David-Hernandez-Resume.pdf">
+      <svg class="sticky-bar-icon sticky-bar-icon--svg" viewBox="0 0 16 16" aria-hidden="true"><path d="M7.47 10.78a.75.75 0 0 0 1.06 0l3.75-3.75a.75.75 0 0 0-1.06-1.06L8.75 8.44V1.75a.75.75 0 0 0-1.5 0v6.69L4.78 5.97a.75.75 0 0 0-1.06 1.06l3.75 3.75ZM3.75 13a.75.75 0 0 0 0 1.5h8.5a.75.75 0 0 0 0-1.5h-8.5Z"></path></svg>
+      <span>Resume</span>
+    </a>
+    <a class="sticky-bar-link sticky-bar-link--cta" href="#projects">
+      <svg class="sticky-bar-icon sticky-bar-icon--svg" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.79L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path></svg>
+      <span>Projects</span>
+    </a>
+  </div>
+</nav>
+
 <header class="hero">
   <div class="hero-photo" id="hero-photo" aria-hidden="true"></div>
   <div class="hero-overlay" aria-hidden="true"></div>
+  <div class="hero-mesh" aria-hidden="true">
+    <span class="hero-mesh-blob hero-mesh-blob-1"></span>
+    <span class="hero-mesh-blob hero-mesh-blob-2"></span>
+    <span class="hero-mesh-blob hero-mesh-blob-3"></span>
+  </div>
   <div class="wrap hero-content">
     <h1 class="reveal-in">David Hernandez</h1>
     <p class="title reveal-in" style="--rd:0.1s">RPA &amp; AI Developer</p>
@@ -59,13 +85,44 @@
         Projects
       </a>
     </div>
+    <dl class="hero-stats reveal-in" style="--rd:0.4s">
+      <div class="hero-stat"><dt>6+</dt><dd>Years Experience</dd></div>
+      <div class="hero-stat"><dt>5</dt><dd>Companies</dd></div>
+      <div class="hero-stat"><dt>4</dt><dd>RPA Platforms</dd></div>
+      <div class="hero-stat"><dt>3</dt><dd>Countries</dd></div>
+    </dl>
     <div class="scroll-cue" aria-hidden="true"><span></span></div>
   </div>
 </header>
 
+<section class="logo-marquee" aria-label="Companies I've worked with">
+  <p class="logo-marquee-label">Companies I've Worked With</p>
+  <div class="logo-marquee-viewport">
+    <div class="logo-track">
+      <div class="logo-track-set">
+        <span class="logo-chip"><img src="img/teleperformance-logo.png" alt="Teleperformance" /></span>
+        <span class="logo-chip"><img src="img/ntt-logo.jpg" alt="NTT DATA" /></span>
+        <span class="logo-chip"><img src="img/spreetail-logo.jpg" alt="Spreetail" /></span>
+        <span class="logo-chip"><img src="img/automation-anywhere-logo.jpg" alt="Automation Anywhere" /></span>
+        <span class="logo-chip logo-chip--invert"><img src="img/apple-logo.png" alt="Apple" /></span>
+        <span class="logo-chip"><img src="img/deloitte-logo.jpg" alt="Deloitte" /></span>
+      </div>
+      <div class="logo-track-set" aria-hidden="true">
+        <span class="logo-chip"><img src="img/teleperformance-logo.png" alt="" /></span>
+        <span class="logo-chip"><img src="img/ntt-logo.jpg" alt="" /></span>
+        <span class="logo-chip"><img src="img/spreetail-logo.jpg" alt="" /></span>
+        <span class="logo-chip"><img src="img/automation-anywhere-logo.jpg" alt="" /></span>
+        <span class="logo-chip logo-chip--invert"><img src="img/apple-logo.png" alt="" /></span>
+        <span class="logo-chip"><img src="img/deloitte-logo.jpg" alt="" /></span>
+      </div>
+    </div>
+  </div>
+</section>
+
 <main class="page-wrap">
 
-  <section class="card reveal" id="about">
+  <div class="split-layout">
+  <section class="card card--narrow reveal split-layout-pinned" id="about">
     <h2>About Me</h2>
     <div class="about-layout">
       <img class="profile-photo" src="img/Profile.jpg" alt="David Hernandez" />
@@ -76,9 +133,13 @@ email, browsers, and APIs. Hands on experience with Automation Anywhere 360, Pow
 Automate, Python, SQL, JavaScript, HTML, and CSS. Known for adaptability, fast learning,
 problem solving, and cross functional collaboration in dynamic environments.</p>
     </div>
+  </section>
 
-    <div class="skills-block">
-      <h3 class="skills-heading">Technical Skills</h3>
+  <div class="split-layout-scroll">
+
+  <section class="card reveal" id="skills">
+    <h2>Technical Skills</h2>
+    <div class="skills-grid">
 
       <div class="skill-group">
         <h4>🤖 Automation Tools</h4>
@@ -138,12 +199,13 @@ problem solving, and cross functional collaboration in dynamic environments.</p>
           <div class="icon-item"><span class="icon">📟</span>Management on Production Support</div>
         </div>
       </div>
+
     </div>
   </section>
 
   <section class="card reveal" id="experience">
     <h2>Work Experience</h2>
-    <p class="section-note">Click "Success Factors" on any card to open its panel on the other side. The timeline grows stronger toward today.</p>
+    <p class="section-note">Click "Success Factors" on any card to open its panel on the other side. Scroll to draw the path — it grows stronger toward today.</p>
 
     <div class="zigzag">
       <svg class="zz-svg" viewBox="0 0 40 1000" preserveAspectRatio="none" aria-hidden="true">
@@ -155,7 +217,7 @@ problem solving, and cross functional collaboration in dynamic environments.</p>
             <stop offset="100%" style="stop-color: var(--color-scale-4)" />
           </linearGradient>
         </defs>
-        <path d="M20,0 C33,90 7,160 20,250 C33,340 7,410 20,500 C33,590 7,660 20,750 C31,820 9,880 20,950 C25,975 18,990 20,1000"
+        <path id="zzPath" d="M20,0 C33,90 7,160 20,250 C33,340 7,410 20,500 C33,590 7,660 20,750 C31,820 9,880 20,950 C25,975 18,990 20,1000"
               stroke="url(#zzGrad)" stroke-width="3.5" fill="none" stroke-linecap="round" />
       </svg>
 
@@ -173,7 +235,7 @@ problem solving, and cross functional collaboration in dynamic environments.</p>
                   <div class="job-company">Spreetail</div>
                 </div>
               </div>
-              <span class="job-date">Jul 2025 – July2026</span>
+              <span class="job-meta"><span class="job-current-badge">Current</span><span class="job-date">Jul 2025 – July2026</span></span>
             </div>
             <div class="job-location"><img class="flag-icon" src="img/us-flag.png" alt="" /> Remote Freelance - US</div>
             <p>Created bots with database, excel, email, browser and API integrations in Power
@@ -360,7 +422,11 @@ and notifications.</p>
         </a>
         <div class="project-body">
           <div class="project-head">
-            <h3>Aperture AI</h3>
+            <div>
+              <span class="project-index">01</span>
+              <h3>Aperture AI</h3>
+            </div>
+            <span class="project-status project-status--live">● Live</span>
           </div>
           <p>A multi-modal AI services gateway — a REST API built with FastAPI, integrating Azure OpenAI for document analysis and Deepgram for speech-to-text and text-to-speech, backed by PostgreSQL for request tracking. Live, public demo — no API key required.</p>
           <div class="tech-tags">
@@ -383,35 +449,51 @@ and notifications.</p>
         </div>
       </div>
 
-      <div class="project-card">
-        <div class="project-head">
-          <h3>Trading Bot</h3>
-          <span class="project-status">🚧 Work in Progress</span>
+      <div class="project-card project-card--has-preview project-card--placeholder">
+        <div class="project-preview project-preview--placeholder">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" /><path d="M15 7h6v6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" /></svg>
         </div>
-        <p>An automated trading bot and market-analysis system — a Python-based strategy engine tracking market trends, trade history, and payment records.</p>
-        <div class="tech-tags">
-          <span class="tech-tag">Python</span>
-          <span class="tech-tag">Trading Automation</span>
-          <span class="tech-tag">Data Analysis</span>
+        <div class="project-body">
+          <div class="project-head">
+            <div>
+              <span class="project-index">02</span>
+              <h3>Trading Bot</h3>
+            </div>
+            <span class="project-status">🚧 In Development</span>
+          </div>
+          <p>An automated trading bot and market-analysis system — a Python-based strategy engine tracking market trends, trade history, and payment records.</p>
+          <div class="tech-tags">
+            <span class="tech-tag">Python</span>
+            <span class="tech-tag">Trading Automation</span>
+            <span class="tech-tag">Data Analysis</span>
+          </div>
         </div>
       </div>
 
-      <div class="project-card">
-        <div class="project-head">
-          <h3>Thrivio &amp; Paws &amp; Reins</h3>
-          <span class="project-status">🚧 Work in Progress</span>
+      <div class="project-card project-card--has-preview project-card--placeholder">
+        <div class="project-preview project-preview--placeholder">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l1.5-5h15L21 9" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" /><path d="M3 9h18v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9Z" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linejoin="round" /><path d="M9 13a3 3 0 0 0 6 0" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" /></svg>
         </div>
-        <p>Two dropshipping store concepts — Thrivio (lifestyle) and Paws &amp; Reins (pets &amp; equestrian) — covering UX research, design audits, and Shopify storefront implementation.</p>
-        <div class="tech-tags">
-          <span class="tech-tag">Shopify</span>
-          <span class="tech-tag">UX Research</span>
-          <span class="tech-tag">E-commerce</span>
+        <div class="project-body">
+          <div class="project-head">
+            <div>
+              <span class="project-index">03</span>
+              <h3>Thrivio &amp; Paws &amp; Reins</h3>
+            </div>
+            <span class="project-status">🚧 In Development</span>
+          </div>
+          <p>Two dropshipping store concepts — Thrivio (lifestyle) and Paws &amp; Reins (pets &amp; equestrian) — covering UX research, design audits, and Shopify storefront implementation.</p>
+          <div class="tech-tags">
+            <span class="tech-tag">Shopify</span>
+            <span class="tech-tag">UX Research</span>
+            <span class="tech-tag">E-commerce</span>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="card reveal" id="education">
+  <section class="card card--narrow reveal" id="education">
     <h2>Education &amp; Languages</h2>
     <div class="edu-grid">
       <div>
@@ -431,6 +513,9 @@ and notifications.</p>
       </div>
     </div>
   </section>
+
+  </div>
+  </div>
 
 </main>
 

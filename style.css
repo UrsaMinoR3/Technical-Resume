@@ -417,6 +417,49 @@ button:focus-visible {
 .back-to-top.is-idle { opacity: 0; pointer-events: none; transform: translateY(8px); }
 .back-to-top-icon { width: var(--size-icon-md); height: var(--size-icon-md); fill: currentColor; }
 
+/* ---------- Sticky action bar ----------
+   Mirrors the hero's own GitHub/LinkedIn/Resume/Projects links so scrolling
+   past the hero never leaves those four actions out of reach — a second
+   surface for the same destinations, not a competing nav with new items.
+   Hidden by default (both opacity/transform AND pointer-events) and only
+   revealed by JS once the hero has scrolled out of view; fails safely to
+   "stays hidden" rather than "permanently stuck open" if JS never runs. */
+.sticky-bar {
+  position: fixed; top: var(--space-4); left: 50%; z-index: var(--z-chrome);
+  transform: translate(-50%, -12px);
+  opacity: 0; pointer-events: none;
+  transition: opacity var(--duration-base) var(--ease-standard), transform var(--duration-base) var(--ease-standard);
+}
+.sticky-bar.is-visible { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+.sticky-bar-inner {
+  display: flex; align-items: center; gap: var(--space-2);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  padding: var(--space-2);
+  box-shadow: var(--shadow-elevated);
+}
+.sticky-bar-link {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  min-height: var(--size-touch-target);
+  font-size: var(--text-sm); font-weight: var(--weight-bold);
+  color: var(--color-text-secondary);
+  border-radius: var(--radius-full);
+  padding: var(--space-2) var(--space-4);
+  text-decoration: none;
+  transition: background var(--duration-fast) ease, color var(--duration-fast) ease;
+}
+.sticky-bar-link:hover { background: var(--color-accent-soft); color: var(--color-text-primary); }
+.sticky-bar-link--cta { color: var(--color-text-on-accent); background: var(--color-accent-solid); }
+.sticky-bar-link--cta:hover { background: var(--color-accent-solid); color: var(--color-text-on-accent); opacity: 0.9; }
+.sticky-bar-icon { width: var(--size-icon-md); height: var(--size-icon-md); flex-shrink: 0; border-radius: var(--radius-circle); object-fit: cover; }
+.sticky-bar-icon--svg { fill: currentColor; border-radius: 0; }
+
+@media (max-width: 640px) {
+  .sticky-bar-link span { display: none; }
+  .sticky-bar-link { padding: var(--space-2); width: var(--size-touch-target); justify-content: center; }
+}
+
 /* ---------- Hero (real photo parallax) ---------- */
 .hero {
   position: relative;
@@ -430,6 +473,7 @@ button:focus-visible {
 }
 @media (max-width: 480px) {
   .hero { min-height: auto; padding: var(--space-9) 0 var(--space-10); }
+  .hero-stats { gap: var(--space-5) var(--space-6); }
 }
 
 .hero-photo {
@@ -491,12 +535,142 @@ img.hero-btn-icon { object-fit: cover; }
 .reveal-in { opacity: 0; transform: translateY(var(--space-4)); animation: revealIn 0.7s ease forwards; animation-delay: var(--rd, 0s); }
 @keyframes revealIn { to { opacity: 1; transform: translateY(0); } }
 
+/* ---------- Hero mesh (ambient motion behind hero copy) ----------
+   Three blurred, low-opacity blobs in the hero's own accent blue,
+   layered above the B&W photo/overlay but below the text — a quiet
+   signal of "this is a living product," not a focal element. Uses
+   mix-blend-mode: screen so it only ever ADDS light against the dark
+   photo overlay, never darkens or reduces text contrast. Frozen (not
+   hidden) under prefers-reduced-motion, same treatment as the page's
+   other ambient decoration, so it still reads as a design choice on
+   a static frame instead of vanishing. */
+.hero-mesh { position: absolute; inset: 0; overflow: hidden; z-index: var(--z-svg); mix-blend-mode: screen; pointer-events: none; }
+.hero-mesh-blob {
+  position: absolute;
+  border-radius: var(--radius-circle);
+  background: var(--color-hero-accent);
+  filter: blur(70px);
+  opacity: 0.28;
+  animation: heroMeshDrift var(--mesh-duration, 20s) ease-in-out infinite;
+}
+.hero-mesh-blob-1 { left: 8%; top: 10%; width: 30vmin; height: 30vmin; --mesh-duration: 22s; animation-delay: 0s; }
+.hero-mesh-blob-2 { right: 10%; top: 30%; width: 24vmin; height: 24vmin; background: var(--color-hero-accent-solid); --mesh-duration: 18s; animation-delay: -6s; }
+.hero-mesh-blob-3 { left: 38%; bottom: -6%; width: 26vmin; height: 26vmin; --mesh-duration: 26s; animation-delay: -12s; }
+@keyframes heroMeshDrift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(6%, -8%) scale(1.15); }
+}
+
+/* ---------- Hero stats (quantified proof, à la nixtio's project counts) ----------
+   Four real numbers pulled straight from the Experience section below —
+   no invented metrics — giving the hero the same confident, data-backed
+   feel as the reference without adding any new claim to verify. */
+.hero-stats { margin-top: var(--space-7); display: flex; justify-content: center; gap: var(--space-7); flex-wrap: wrap; }
+.hero-stat { text-align: center; }
+.hero-stat dt { font-size: var(--text-xl); font-weight: var(--weight-bold); line-height: 1; color: var(--color-hero-text); }
+.hero-stat dd { margin-top: var(--space-1); font-size: var(--text-xs); font-weight: var(--weight-medium); color: var(--color-hero-text-muted); text-transform: uppercase; letter-spacing: var(--tracking-label); }
+
 .scroll-cue { margin: var(--space-7) auto 0; width: var(--space-5); height: var(--space-8); border: 2px solid var(--color-hero-border); border-radius: var(--radius-full); position: relative; }
 .scroll-cue span { position: absolute; top: var(--space-2); left: 50%; width: var(--space-1); height: var(--space-2); margin-left: calc(var(--space-1) / -2); background: var(--color-hero-accent); border-radius: var(--radius-sm); animation: scrollCue 1.6s ease-in-out infinite; }
 @keyframes scrollCue { 0% { transform: translateY(0); opacity: 1; } 70% { transform: translateY(12px); opacity: 0; } 100% { opacity: 0; } }
 
-/* ---------- Page shell ---------- */
-.page-wrap { max-width: 900px; margin: 0 auto; padding: var(--space-9) var(--space-6) var(--space-10); }
+/* ---------- Logo marquee ("companies I've worked with") ----------
+   A full-bleed band (background spans edge to edge, matching the hero's
+   own full-bleed treatment) sitting between the hero and the page's
+   contained sections — a trust signal read before the bio, same intent
+   as nixtio's client strip. The scroll itself is the standard duplicate-
+   the-track marquee technique: two identical, aria-hidden-on-the-second
+   logo sets sit side by side inside a flex track twice the visible
+   width; animating that track exactly -50% loops seamlessly because the
+   second set is already in the position the first set just vacated. */
+.logo-marquee {
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg-surface-subtle);
+  padding: var(--space-6) 0;
+}
+.logo-marquee-label {
+  /* Matches .page-wrap's wide-shell formula (not .wrap/.logo-marquee-viewport's
+     860px reading cap below it) so the label's centered text block shares the
+     same outer rhythm as the rest of the wide page shell, even though the
+     marquee track itself stays intentionally narrower and contained. */
+  width: 90%; max-width: 1760px; margin: 0 auto var(--space-4); padding: 0 var(--space-6);
+  text-align: center;
+  font-size: var(--text-xs); font-weight: var(--weight-bold); text-transform: uppercase;
+  letter-spacing: var(--tracking-label); color: var(--color-text-muted);
+}
+.logo-marquee-viewport {
+  /* Contained, not full-bleed: a shorter track means the same six logos
+     cycle back around faster, so the loop reads as a tight, deliberate
+     repeat instead of six logos stretched thin across the whole screen.
+     Matches .wrap's reading-width container so it lines up with the
+     card below it rather than fighting .page-wrap's wide 1180px shell. */
+  max-width: 860px; margin: 0 auto; padding: 0 var(--space-6);
+  overflow: hidden;
+  /* fades the hard clip at each edge into the section background so the
+     loop reads as continuous motion rather than logos snapping off a cliff */
+  mask-image: linear-gradient(90deg, transparent 0, #000 var(--space-9), #000 calc(100% - var(--space-9)), transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 var(--space-9), #000 calc(100% - var(--space-9)), transparent 100%);
+}
+.logo-track { display: flex; width: max-content; animation: logoMarquee 26s linear infinite; }
+.logo-track-set { display: flex; align-items: center; gap: var(--space-5); padding-right: var(--space-5); }
+@keyframes logoMarquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* Chips are sizing/spacing wrappers only — no fill, border or shadow.
+   The six source logos each carry their own baked-in fill (white, blue,
+   or black opaque backgrounds; only Apple has real alpha transparency),
+   so a single uniform CSS filter — not a card background — is what turns
+   that mismatched patchwork into one cohesive light-grey "trusted by"
+   mark instead of a row of colored squares. Hovering an individual chip
+   lifts the filter to reveal the logo's true color as a small reward,
+   the same "quiet at rest, responds on hover" language as .icon-item. */
+.logo-chip {
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  padding: var(--space-2) var(--space-4);
+}
+.logo-chip img {
+  height: var(--size-logo); width: auto; max-width: 120px; object-fit: contain; display: block;
+  filter: grayscale(1) brightness(1.6) contrast(0.9);
+  opacity: 0.75;
+  transition: filter var(--duration-base) ease, opacity var(--duration-base) ease;
+}
+.logo-chip:hover img { filter: grayscale(0) brightness(1) contrast(1); opacity: 1; }
+/* Apple's mark is real transparency + solid black fill (the opposite of
+   the other five's opaque light/dark fills), so it needs an extra invert
+   before the shared grayscale/brightness pass — otherwise it renders as
+   an invisible black shape against the dark marquee background. */
+.logo-chip--invert img { filter: invert(1) grayscale(1) brightness(1.6) contrast(0.9); }
+.logo-chip--invert:hover img { filter: invert(1) grayscale(0) brightness(1) contrast(1); opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-track { animation: none !important; transform: none !important; }
+  .logo-marquee-viewport { overflow-x: auto; }
+}
+
+@media (max-width: 640px) {
+  .logo-chip { padding: var(--space-3) var(--space-5); }
+  .logo-chip img { height: 28px; }
+}
+
+/* ---------- Page shell ----------
+   Two container widths for two kinds of content, not one flat max-width
+   for everything: .page-wrap is the WIDE shell (dashboards/grids —
+   Experience's zigzag and Projects' card grid earn the extra room on a
+   wide monitor), while .card--narrow re-caps individual sections back
+   to a comfortable reading measure for prose (About, Education).
+
+   .page-wrap is percentage-based (90% of viewport, ~5% margin per side)
+   rather than a single fixed max-width, so it actually uses the screen
+   on laptop/desktop monitors instead of leaving large dead margins —
+   the old flat 1180px cap left ~19% empty on each side of a 1920px
+   display. The 1760px ceiling is deliberately set just above what 90%
+   already produces at a 1920px viewport (1728px): every standard
+   monitor up to "1920p-equivalent" gets the true 90% treatment, and
+   only wider-than-that displays (2K/ultra-wide/4K+) hit the ceiling,
+   which keeps the zigzag/project-grid from stretching into unreadably
+   long rows on the very widest screens instead of scaling forever. */
+.page-wrap { width: 90%; max-width: 1760px; margin: 0 auto; padding: var(--space-9) var(--space-6) var(--space-10); }
+.card--narrow { max-width: 720px; margin-left: auto; margin-right: auto; }
 
 /* content visible by default; JS only ever adds the reveal animation on
    top once it's confirmed working (see script.js) */
@@ -523,6 +697,129 @@ html.js-reveal .reveal.in-view { opacity: 1; transform: translateY(0); }
 .card p { color: var(--color-text-secondary); font-size: var(--text-base); white-space: pre-line; }
 .section-note { color: var(--color-text-muted); font-size: var(--text-xs); margin: calc(var(--space-2) * -1) 0 var(--space-5); }
 
+/* ---------- Split layout: fixed About column + scrolling content ----------
+   The About card (photo + bio only — Technical Skills now lives in the
+   scroll column, see below) is pinned in the left column while Skills,
+   Experience, Projects and Education scroll past on the right. Pinning is
+   true position: fixed, not sticky — sticky visibly travels with the page
+   until it reaches its offset and locks, which read as unwanted motion;
+   fixed removes that entirely; a JS scroll listener (mirroring the sticky
+   action bar's own show/hide pattern below) toggles a class that turns
+   the fixed positioning on only while the grid's own vertical range
+   straddles the pin offset, so this true fixed element can never float
+   over the hero/marquee above the section or the footer below it.
+
+   --pinned-col-width / --page-wrap-left / --pin-top-offset are the single
+   source of truth for both the grid's own track sizing AND the fixed
+   column's inline left/top/width — the fixed box is a pixel-exact overlay
+   of the grid's first (reserved) track, not an independently-computed
+   position, so there is no separate arithmetic to drift out of sync:
+     page-wrap left edge  = max(5vw, (100vw - 1760px) / 2)   [.page-wrap's
+       own width:90%/max-width:1760px/margin:auto formula]
+     split-layout left edge = page-wrap left edge + --space-6 (.page-wrap's
+       own horizontal padding)
+     pin-top-offset = clears the sticky action bar: 16px from viewport top
+       + ~60px pill height (44px touch target + 2×8px padding) + one more
+       --space-4 of breathing room.
+   .split-layout-scroll is explicitly placed in grid-column 2 (not left to
+   auto-placement) because position: fixed removes .split-layout-pinned
+   from grid-item participation — without an explicit column, the scroll
+   column would auto-place itself into the now-vacant column 1 the moment
+   the pinned card goes fixed. Column 1's track width is a definite length
+   (the clamp(), not "auto"), so it stays reserved at exactly
+   --pinned-col-width whether or not a real grid item currently sits in it,
+   which is what keeps the scroll column's content from ever sliding
+   underneath the fixed card.
+
+   Below 980px (matching the project-grid 3-up breakpoint already in this
+   file) there isn't room for both a useful pinned column and a readable
+   scroll column, so the layout drops to plain stacked flow — About first,
+   then Skills/Experience/Projects/Education — with no fixed behavior at
+   all (script.js gates the toggle behind the same 980px check). */
+.split-layout {
+  display: block;
+  --pinned-col-width: clamp(420px, 25vw, 520px);
+  --page-wrap-left: max(5vw, calc((100vw - 1760px) / 2));
+  --pin-top-offset: calc(var(--space-4) * 2 + 60px);
+}
+.split-layout-scroll {
+  /* Establishes size containment so the container queries below can react
+     to the actual right-column width once it's narrowed by the pinned
+     column, instead of the viewport width the old plain @media rules used. */
+  container-type: inline-size;
+  container-name: split-scroll;
+  min-width: 0;
+}
+
+@media (min-width: 980px) {
+  .split-layout {
+    display: grid;
+    grid-template-columns: var(--pinned-col-width) minmax(0, 1fr);
+    align-items: start;
+    gap: var(--space-7);
+  }
+  .split-layout-pinned { grid-column: 1; }
+  .split-layout-scroll { grid-column: 2; }
+
+  .split-layout-pinned.is-pinned-fixed {
+    position: fixed;
+    top: var(--pin-top-offset);
+    left: calc(var(--page-wrap-left) + var(--space-6));
+    width: var(--pinned-col-width);
+    margin: 0; /* .card--narrow's auto margins don't apply once positioned */
+    z-index: var(--z-content);
+  }
+  /* Safety net only: at very short desktop-width viewports (e.g. a tablet
+     in landscape) the pin offset + photo + bio can approach the viewport
+     height. The bio alone doesn't need this on any common laptop/desktop
+     height, so it stays out of the default rule and only engages here. */
+  @media (max-height: 560px) {
+    .split-layout-pinned.is-pinned-fixed {
+      max-height: calc(100vh - var(--pin-top-offset) - var(--space-6));
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+  }
+  /* Side-by-side photo/text needs real width to avoid a squeezed text
+     column; the pinned instance keeps the photo stacked above the bio
+     (the same layout .about-layout already uses below 640px) regardless
+     of viewport width, and caps the bio's line length so a wider column
+     never reads as an uncomfortably long centered paragraph. Only applies
+     once the split/pin layout is actually active — the standalone
+     stacked-flow view below 980px keeps the normal row layout at 640px+,
+     unchanged from before this feature existed. */
+  .split-layout-pinned .about-layout {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .split-layout-pinned .about-layout p { max-width: 46ch; }
+}
+
+/* Mirrors the old @media (max-width: 720px) viewport-width breakpoint, but
+   reacts to the scroll column's real width (the split-scroll container) so
+   the two-up zigzag correctly collapses to one column once the pinned
+   sidebar has actually eaten into its space, not just on small viewports. */
+@container split-scroll (max-width: 720px) {
+  .zz-row { grid-template-columns: 1fr; }
+  .zz-connector { display: none; }
+  .zz-svg { display: none; }
+}
+
+/* Mirrors the old @media (min-width: 980px) project-grid rule the same
+   way: 930px is the content width at which the original rule started
+   3-up cards (viewport 980px minus the page shell's 2×24px padding =
+   932px). With .page-wrap now a percentage-based wide shell (see the
+   page-shell block above), the scroll column comfortably clears 930px
+   on laptop screens and up, so 3-up now DOES trigger while pinned on
+   most desktop viewports — it only settles on 2-up when the pinned
+   sidebar and a narrower viewport leave the scroll column genuinely
+   tight, matching how this grid already looked on tablet-width
+   viewports before this feature existed. */
+@container split-scroll (min-width: 930px) {
+  .project-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
 /* ---------- About: circular photo + text ---------- */
 .about-layout { display: flex; flex-direction: column; align-items: center; gap: var(--space-4); text-align: center; margin-bottom: var(--space-2); }
 .profile-photo {
@@ -534,10 +831,22 @@ html.js-reveal .reveal.in-view { opacity: 1; transform: translateY(0); }
   .profile-photo { width: var(--size-avatar-lg); height: var(--size-avatar-lg); }
 }
 
-.skills-block { margin-top: var(--space-6); padding-top: var(--space-6); border-top: 1px solid var(--color-border); }
-.skills-heading { font-size: var(--text-xs); font-weight: var(--weight-bold); text-transform: uppercase; letter-spacing: var(--tracking-label); color: var(--color-text-muted); margin-bottom: var(--space-4); }
-
+/* ---------- Technical Skills (scroll column) ----------
+   Lives in the wide scroll column now, not the narrow pinned card, so it
+   can use real horizontal room: a responsive grid of skill-groups instead
+   of one long stacked list. Reacts to the scroll column's own width via
+   the split-scroll container (same mechanism as the zigzag/project-grid
+   above) rather than the viewport, since that's the space actually
+   available once the fixed About column is in play. */
+.skills-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-6) var(--space-7); }
+@container split-scroll (min-width: 560px) {
+  .skills-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@container split-scroll (min-width: 900px) {
+  .skills-grid { grid-template-columns: repeat(3, 1fr); }
+}
 .skill-group { margin-bottom: var(--space-5); }
+.skills-grid .skill-group { margin-bottom: 0; }
 .skill-group:last-child { margin-bottom: 0; }
 .skill-group h4 { font-size: var(--text-sm); font-weight: var(--weight-bold); color: var(--color-text-primary); margin-bottom: var(--space-2); }
 .icon-list { display: flex; flex-wrap: wrap; gap: var(--space-2); }
@@ -586,10 +895,21 @@ html.js-reveal .reveal.in-view { opacity: 1; transform: translateY(0); }
 
 .zz-item.zz-strongest .job-card { box-shadow: 0 0 0 2px var(--color-scale-4); }
 
-@media (max-width: 720px) {
-  .zz-row { grid-template-columns: 1fr; }
-  .zz-connector { display: none; }
-  .zz-svg { display: none; }
+/* ---------- Dynamic path: scroll-driven line draw + "you are here" ----------
+   zzPath's stroke-dashoffset is driven directly from scroll position in
+   script.js (not a CSS animation) so the line's growth always matches
+   how far the user has actually scrolled through the section — a real
+   progress indicator, not a timed effect. zz-active marks whichever role
+   is currently centered in the viewport; it uses the accent color (an
+   interaction/reading-position signal) which is deliberately distinct
+   from the permanent scale-4 ring on the most recent role (a data/
+   recency signal), so the two never get visually confused. */
+.zz-dot { transition: transform var(--duration-base) var(--ease-standard); }
+.zz-item.zz-active .zz-dot { transform: scale(1.3); }
+.zz-item.zz-active .job-card {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px var(--color-accent);
+  transition: border-color var(--duration-base) ease, box-shadow var(--duration-base) ease;
 }
 
 /* ---------- Job card + Success Factors card + Project card ---------- */
@@ -610,7 +930,14 @@ html.js-reveal .reveal.in-view { opacity: 1; transform: translateY(0); }
   padding: var(--space-1);
 }
 .job-head h3 { font-size: var(--text-base); font-weight: var(--weight-bold); }
+.job-meta { display: flex; align-items: center; gap: var(--space-2); }
 .job-date { font-size: var(--text-xs); color: var(--color-text-muted); font-weight: var(--weight-bold); white-space: nowrap; }
+.job-current-badge {
+  font-size: var(--text-xs); font-weight: var(--weight-bold); text-transform: uppercase; letter-spacing: var(--tracking-label);
+  color: var(--color-scale-4); background: color-mix(in srgb, var(--color-scale-4) 12%, transparent);
+  border: 1px solid var(--color-scale-4); border-radius: var(--radius-full);
+  padding: var(--space-1) var(--space-3); white-space: nowrap;
+}
 .job-company { font-size: var(--text-sm); font-weight: var(--weight-bold); color: var(--color-accent); margin-top: var(--space-1); }
 .job-location {
   display: flex; align-items: center; gap: var(--space-2);
@@ -654,7 +981,10 @@ html.js-reveal .reveal.in-view { opacity: 1; transform: translateY(0); }
   padding-top: var(--space-5); padding-bottom: var(--space-5);
   transform: scale(1);
 }
-@media (max-width: 720px) {
+/* Same collapse condition as the zz-row/zz-svg rule above — the stacked
+   Success Factors card needs the top margin the two-column layout gets
+   for free from .zz-connector's padding, once that connector is gone. */
+@container split-scroll (max-width: 720px) {
   .factors-card { margin-top: 0; }
   .zz-item.factors-open .factors-card { margin-top: var(--space-4); }
 }
@@ -667,14 +997,26 @@ html.js-reveal .reveal.in-view { opacity: 1; transform: translateY(0); }
 /* ---------- Personal Projects ---------- */
 .project-grid {
   display: grid; grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-4); align-items: start;
+  gap: var(--space-5); align-items: start;
 }
+/* Three across once the scroll column gives each card enough room to
+   still fit a title, tags and buttons comfortably — avoids a lonely
+   third card stranded alone on its own row. See the split-layout block
+   above for the @container rule that replaced this as a fixed viewport
+   breakpoint (it needs to react to the actual column width, which is
+   narrower than the viewport once the About sidebar is pinned). */
 @media (max-width: 640px) { .project-grid { grid-template-columns: 1fr; } }
-.project-card { display: flex; flex-direction: column; }
+.project-card {
+  display: flex; flex-direction: column;
+  transition: border-color var(--duration-base) ease, transform var(--duration-base) var(--ease-standard);
+}
+.project-card:hover { border-color: var(--color-accent); transform: translateY(-2px); }
 .project-head { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: var(--space-3); margin-bottom: var(--space-2); }
-.project-head h3 { font-size: var(--text-base); font-weight: var(--weight-bold); }
+.project-index { display: block; font-size: var(--text-xs); font-weight: var(--weight-bold); color: var(--color-text-muted); letter-spacing: var(--tracking-label); margin-bottom: var(--space-1); }
+.project-head h3 { font-size: var(--text-lg); font-weight: var(--weight-bold); }
 .project-card p { font-size: var(--text-sm); color: var(--color-text-secondary); margin-bottom: var(--space-3); }
 .project-status { font-size: var(--text-xs); font-weight: var(--weight-bold); color: var(--color-text-muted); white-space: nowrap; }
+.project-status--live { color: var(--color-scale-4); }
 .tech-tags { display: flex; flex-wrap: wrap; gap: var(--space-2); }
 .tech-tags:last-child { margin-top: auto; }
 .tech-tag {
@@ -717,6 +1059,20 @@ html.js-reveal .reveal.in-view { opacity: 1; transform: translateY(0); }
 .project-card--has-preview:hover .project-preview img,
 .project-preview:focus-visible img { filter: grayscale(0%) brightness(1); transform: scale(1.08); }
 .project-body { padding: var(--space-4) var(--space-5); display: flex; flex-direction: column; flex: 1; }
+
+/* Placeholder preview for in-development projects — a hairline pattern
+   + outline icon standing in for a real screenshot, so the two WIP
+   cards match the Aperture AI card's silhouette (image-topped, same
+   aspect ratio) instead of reading as a lesser, unfinished variant.
+   Swap for a real screenshot the moment each project ships. */
+.project-preview--placeholder {
+  display: flex; align-items: center; justify-content: center;
+  background: repeating-linear-gradient(135deg, var(--color-bg-surface-subtle) 0 10px, var(--color-bg-page) 10px 11px);
+  color: var(--color-text-muted);
+  transition: color var(--duration-base) ease;
+}
+.project-preview--placeholder svg { width: 40px; height: 40px; }
+.project-card--placeholder:hover .project-preview--placeholder { color: var(--color-accent); }
 
 /* ---------- Education ---------- */
 .edu-grid { display: flex; flex-direction: column; gap: var(--space-5); }
