@@ -99,60 +99,99 @@
     }
   } catch (e) { /* CSS default already has .reveal visible */ }
 
-  /* ---------- Split layout: fixed-position About column ----------
-     Toggles .is-pinned-fixed on the pinned About card only while the
-     split section's own vertical range straddles the pin offset — the
-     same rAF-batched getBoundingClientRect pattern as the sticky action
-     bar above, so the two "toggle a fixed element based on scroll range"
-     features share one mental model. pinTopOffset is read from the CSS
-     custom property (--pin-top-offset on .split-layout) rather than
-     hard-coded a second time, so the JS activation point and the CSS
-     `top` it snaps to can never drift out of sync with each other. */
+  /* ---------- Projects: bubble-grow, scroll-scrubbed ----------
+     Separate from the .reveal observer above on purpose — Projects now
+     lives outside the split grid as its own full-width section (see
+     style.css's .projects-bubble rules) and gets a distinct "grows from
+     a small bubble" treatment instead of the fade-up every other card
+     uses.
+
+     This used to toggle a .bubble-in class on/off, animated by a fixed-
+     duration CSS transition — which read as an abrupt, canned pop
+     regardless of how fast or slow the user was actually scrolling
+     (Ignitus's report: "appearing fast," not tied to scroll). Replaced
+     with the exact same technique as the Experience line-fill just below
+     — a continuous 0–1 progress value, recomputed from real scroll
+     position every rAF frame and written straight to a --bubble-progress
+     CSS custom property, which style.css's calc()-based clip-path/
+     transform consume directly. No CSS transition is left racing toward
+     a target — the bubble's size at any instant IS the current scroll
+     position, so it scrubs 1:1 with the user's scroll instead of playing
+     a fixed-length animation.
+
+     Progress is the minimum of two independent ramps, each keyed off one
+     edge of the section (mirroring the old binary implementation's
+     0.85/0.15 viewport-ratio reference points, now turned into ramps
+     instead of hard cutoffs — so the design intent is unchanged, only
+     the transition from "instant toggle" to "continuous" is new):
+       enterProgress — ramps 0 → 1 as the section's TOP edge rises from
+         the bottom of the viewport (rect.top === winH, just entering,
+         progress 0) up to 15% down from the top of the viewport
+         (rect.top === winH * 0.15, comfortably in view, progress 1).
+         Scrolling back up so the section drops back below the fold
+         naturally drives this back down to 0 — covers the "scrolled
+         back above it" bidirectional case.
+       exitProgress — ramps 1 → 0 as the section's BOTTOM edge falls from
+         15% down from the top of the viewport (rect.bottom === winH *
+         0.15, progress 1) to the very top of the viewport (rect.bottom
+         === 0, fully scrolled past, progress 0). Scrolling back down
+         after passing it naturally drives this back up to 1 — covers
+         the "scrolled past it going down" bidirectional case.
+     Taking the min() of both means the bubble is only ever fully grown
+     while BOTH conditions hold (meaningfully past its top edge AND not
+     yet meaningfully past its bottom edge), and shrinks smoothly the
+     moment either edge starts to leave, in either scroll direction. */
   try {
-    const splitLayout = document.querySelector(".split-layout");
-    const pinnedCol = document.querySelector(".split-layout-pinned");
-    const desktopQuery = window.matchMedia("(min-width: 980px)");
+    const projectsEl = document.getElementById("projects");
+    if (projectsEl && !reduceMotion) {
+      const ENTER_RATIO = 0.85; // enterProgress reaches 1 once the top edge has risen through this fraction of the viewport
+      const EXIT_RATIO = 0.15; // exitProgress reaches 0 once the bottom edge has fallen through this fraction of the viewport
 
-    if (splitLayout && pinnedCol) {
-      function getPinTopOffset() {
-        const raw = getComputedStyle(splitLayout).getPropertyValue("--pin-top-offset");
-        const parsed = parseFloat(raw);
-        return Number.isFinite(parsed) ? parsed : 92; // matches the CSS calc() fallback
+      function clamp01(value) {
+        return Math.min(1, Math.max(0, value));
       }
 
-      function updatePinnedColumn() {
-        if (!desktopQuery.matches) {
-          pinnedCol.classList.remove("is-pinned-fixed");
-          return;
-        }
-        const rect = splitLayout.getBoundingClientRect();
-        const pinTopOffset = getPinTopOffset();
-        // Fixed only while the section's own range straddles the offset —
-        // above it (not scrolled down enough yet, or scrolled back above
-        // the section) or below it (section has fully scrolled past) both
-        // fall back to normal static grid flow.
-        const inRange = rect.top <= pinTopOffset && rect.bottom > pinTopOffset;
-        pinnedCol.classList.toggle("is-pinned-fixed", inRange);
+      function updateProjectsBubble() {
+        const rect = projectsEl.getBoundingClientRect();
+        const winH = window.innerHeight;
+        const enterProgress = clamp01((winH - rect.top) / (winH * ENTER_RATIO));
+        const exitProgress = clamp01(rect.bottom / (winH * EXIT_RATIO));
+        const progress = Math.min(enterProgress, exitProgress);
+        projectsEl.style.setProperty("--bubble-progress", progress.toFixed(3));
       }
 
-      let pinTicking = false;
+      root.classList.add("js-bubble");
+
+      let bubbleTicking = false;
       window.addEventListener(
         "scroll",
         () => {
-          if (!pinTicking) {
+          if (!bubbleTicking) {
             requestAnimationFrame(() => {
-              updatePinnedColumn();
-              pinTicking = false;
+              updateProjectsBubble();
+              bubbleTicking = false;
             });
-            pinTicking = true;
+            bubbleTicking = true;
           }
         },
         { passive: true }
       );
-      window.addEventListener("resize", updatePinnedColumn, { passive: true });
-      updatePinnedColumn();
+      window.addEventListener("resize", updateProjectsBubble, { passive: true });
+      updateProjectsBubble();
     }
-  } catch (e) { /* CSS default keeps the column in normal static grid flow */ }
+  } catch (e) { /* CSS default already shows the panel fully expanded */ }
+
+  /* ---------- Split layout: sticky About column ----------
+     No JS needed here anymore. This used to toggle a .is-pinned-fixed
+     class via a scroll-range check against .split-layout's own
+     getBoundingClientRect() — a JS approximation of "stop pinning once
+     the section ends" that could drift out of sync and let the column
+     bleed past Education into the Projects section below it (a real bug
+     Ignitus hit once Projects moved out to its own full-width section).
+     Switched to plain CSS position: sticky (see .split-layout-pinned in
+     style.css), which is spec-guaranteed to never render past its own
+     containing block — the browser enforces that boundary on every
+     frame natively, so there is no scroll-range math left to get wrong. */
 
   /* ---------- Experience: dynamic line (scroll-driven fill + "you are here") ----------
      The left-edge accent line fills in proportion to how far the user

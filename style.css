@@ -220,6 +220,23 @@
    RESET & BASE
    ============================================================ */
 * { box-sizing: border-box; margin: 0; padding: 0; }
+/* overflow-x: hidden lives on <html> ONLY — not duplicated on <body>. Per the
+   CSS Overflow spec, a root element's overflow propagates to the viewport
+   ONLY when <body> doesn't also declare its own overflow; declaring it on
+   BOTH (as this file did until this pass) makes <body>'s value win the
+   propagation instead, which strands <html>'s own overflow-x: hidden as a
+   real box property on <html> itself — and because a non-'visible' value on
+   one axis forces the other axis to an implicit non-'visible' value too
+   (the CSS Overflow "computed value" pairing rule), that turns <html> into
+   an actual, unintended intermediate scroll container sitting between the
+   real viewport and <body>. Every position: sticky element on the page then
+   computes its containing block against THAT broken container instead of
+   the real viewport, which silently breaks sticky (the About column showed
+   this exact symptom — frozen in one spot for the whole scroll rather than
+   locking/releasing correctly). Keeping the declaration on <html> alone
+   lets it propagate to the viewport the way the spec intends — same
+   horizontal-scroll protection, zero risk of an accidental scroll
+   container being inserted into the sticky containing-block chain. */
 html { scroll-behavior: smooth; overflow-x: hidden; }
 body {
   background: var(--color-bg-page);
@@ -228,7 +245,6 @@ body {
   font-size: var(--text-base);
   line-height: var(--leading-normal);
   transition: background var(--duration-base) ease, color var(--duration-base) ease;
-  overflow-x: hidden;
   overflow-wrap: break-word;
 }
 .wrap { max-width: 860px; margin: 0 auto; padding: 0 var(--space-6); position: relative; }
@@ -683,10 +699,12 @@ img.hero-btn-icon { object-fit: cover; }
    the Experience timeline and Projects' card grid earn the extra room
    on a wide monitor), while .card--narrow re-caps the About card (photo
    + short bio, prose-only) back to a comfortable reading measure. Every
-   other card in the scroll column — Skills, Experience, Projects,
-   Education — intentionally fills the column's full width, the same
-   width its siblings use, so no card reads as narrower/off-center than
-   the ones around it.
+   remaining card in the scroll column — Skills, Experience, Education —
+   intentionally fills the column's full width, the same width its
+   siblings use, so no card reads as narrower/off-center than the ones
+   around it. Projects sits outside the split grid entirely (see
+   .projects-bubble below) so it gets the full page-wrap width instead
+   of the narrower scroll-column track.
 
    .page-wrap is percentage-based (90% of viewport, ~5% margin per side)
    rather than a single fixed max-width, so it actually uses the screen
@@ -736,49 +754,58 @@ html.js-reveal .reveal.in-view { opacity: 1; transform: translateY(0); }
 .card p { color: var(--color-text-secondary); font-size: var(--text-base); white-space: pre-line; }
 .section-note { color: var(--color-text-muted); font-size: var(--text-xs); margin: calc(var(--space-2) * -1) 0 var(--space-5); }
 
-/* ---------- Split layout: fixed About column + scrolling content ----------
+/* ---------- Split layout: sticky About column + scrolling content ----------
    The About card (photo + bio only — Technical Skills now lives in the
-   scroll column, see below) is pinned in the left column while Skills,
-   Experience, Projects and Education scroll past on the right. Pinning is
-   true position: fixed, not sticky — sticky visibly travels with the page
-   until it reaches its offset and locks, which read as unwanted motion;
-   fixed removes that entirely; a JS scroll listener (mirroring the sticky
-   action bar's own show/hide pattern below) toggles a class that turns
-   the fixed positioning on only while the grid's own vertical range
-   straddles the pin offset, so this true fixed element can never float
-   over the hero/marquee above the section or the footer below it.
+   scroll column, see below) sticks in the left column while Skills,
+   Experience and Education scroll past on the right.
 
-   --pinned-col-width / --page-wrap-left / --pin-top-offset are the single
-   source of truth for both the grid's own track sizing AND the fixed
-   column's inline left/top/width — the fixed box is a pixel-exact overlay
-   of the grid's first (reserved) track, not an independently-computed
-   position, so there is no separate arithmetic to drift out of sync:
-     page-wrap left edge  = max(5vw, (100vw - 1760px) / 2)   [.page-wrap's
-       own width:90%/max-width:1760px/margin:auto formula]
-     split-layout left edge = page-wrap left edge + --space-6 (.page-wrap's
-       own horizontal padding)
-     pin-top-offset = clears the sticky action bar: 16px from viewport top
-       + ~60px pill height (44px touch target + 2×8px padding) + one more
-       --space-4 of breathing room.
-   .split-layout-scroll is explicitly placed in grid-column 2 (not left to
-   auto-placement) because position: fixed removes .split-layout-pinned
-   from grid-item participation — without an explicit column, the scroll
-   column would auto-place itself into the now-vacant column 1 the moment
-   the pinned card goes fixed. Column 1's track width is a definite length
-   (the clamp(), not "auto"), so it stays reserved at exactly
-   --pinned-col-width whether or not a real grid item currently sits in it,
-   which is what keeps the scroll column's content from ever sliding
-   underneath the fixed card.
+   position: sticky, not fixed — this was previously true position: fixed,
+   toggled on/off by a JS scroll-range check against .split-layout's
+   getBoundingClientRect(). That JS approximation was the root cause of a
+   real bug: once Projects became its own full-width section AFTER
+   .split-layout (see the page-shell note above), any small drift between
+   the JS's computed unpin point and .split-layout's actual bottom edge
+   let the fixed column visually bleed down into Projects. position: sticky
+   fixes this by construction, not approximation: a sticky element is
+   spec-guaranteed to never render past its containing block's bounds —
+   here, .split-layout-pinned's containing block is its own grid area
+   (column 1 of .split-layout), and because align-items: start still lets
+   the grid row size itself to the TALLEST item in the row (the Skills/
+   Experience/Education column, i.e. .split-layout-scroll), column 1's
+   grid area — the sticky element's actual containment box — spans the
+   exact same vertical range as .split-layout itself. So "stops sticking
+   at the bottom of its containing block" and "stops sticking at the
+   bottom of .split-layout / Education" are the same boundary, enforced
+   natively by the browser's layout engine on every frame — there is no
+   scroll-range math left to drift out of sync, and thus no mechanism by
+   which it could ever render past Education into Projects. The one
+   traded-off cost (Ignitus was already told this explicitly): sticky
+   visibly scrolls a short distance before locking at `top`, rather than
+   fixed's "locks immediately, zero perceived travel" — a real but purely
+   cosmetic difference, chosen here because the overlap bug is a second,
+   functional regression in this same area tonight and native containment
+   removes the entire class of bug rather than further tuning the JS
+   approximation.
+
+   --pinned-col-width sizes the grid's first track; sticky elements stay
+   their normal box width (the grid track's width) automatically, so
+   unlike the old fixed approach no separate left/width arithmetic is
+   needed to keep the sticky box aligned with its own column — it simply
+   never leaves it. --pin-top-offset clears the sticky action bar: 16px
+   from viewport top + ~60px pill height (44px touch target + 2×8px
+   padding) + one more --space-4 of breathing room, used directly as
+   sticky's own `top` value.
 
    Below 980px (matching the project-grid 3-up breakpoint already in this
-   file) there isn't room for both a useful pinned column and a readable
+   file) there isn't room for both a useful sticky column and a readable
    scroll column, so the layout drops to plain stacked flow — About first,
-   then Skills/Experience/Projects/Education — with no fixed behavior at
-   all (script.js gates the toggle behind the same 980px check). */
+   then Skills/Experience/Education, with Projects following as its own
+   full-width section — with no sticky behavior at all (position: sticky
+   is scoped entirely inside the @media (min-width: 980px) block below,
+   so it's simply absent, not toggled, on narrower viewports). */
 .split-layout {
   display: block;
   --pinned-col-width: clamp(420px, 25vw, 520px);
-  --page-wrap-left: max(5vw, calc((100vw - 1760px) / 2));
   --pin-top-offset: calc(var(--space-4) * 2 + 60px);
 }
 .split-layout-scroll {
@@ -797,23 +824,20 @@ html.js-reveal .reveal.in-view { opacity: 1; transform: translateY(0); }
     align-items: start;
     gap: var(--space-7);
   }
-  .split-layout-pinned { grid-column: 1; }
-  .split-layout-scroll { grid-column: 2; }
-
-  .split-layout-pinned.is-pinned-fixed {
-    position: fixed;
+  .split-layout-pinned {
+    grid-column: 1;
+    position: sticky;
     top: var(--pin-top-offset);
-    left: calc(var(--page-wrap-left) + var(--space-6));
-    width: var(--pinned-col-width);
-    margin: 0; /* .card--narrow's auto margins don't apply once positioned */
     z-index: var(--z-content);
   }
+  .split-layout-scroll { grid-column: 2; }
+
   /* Safety net only: at very short desktop-width viewports (e.g. a tablet
      in landscape) the pin offset + photo + bio can approach the viewport
      height. The bio alone doesn't need this on any common laptop/desktop
      height, so it stays out of the default rule and only engages here. */
   @media (max-height: 560px) {
-    .split-layout-pinned.is-pinned-fixed {
+    .split-layout-pinned {
       max-height: calc(100vh - var(--pin-top-offset) - var(--space-6));
       overflow-y: auto;
       overscroll-behavior: contain;
@@ -835,17 +859,13 @@ html.js-reveal .reveal.in-view { opacity: 1; transform: translateY(0); }
   .split-layout-pinned .about-layout p { max-width: 46ch; }
 }
 
-/* Mirrors the old @media (min-width: 980px) project-grid rule the same
-   way: 930px is the content width at which the original rule started
-   3-up cards (viewport 980px minus the page shell's 2×24px padding =
-   932px). With .page-wrap now a percentage-based wide shell (see the
-   page-shell block above), the scroll column comfortably clears 930px
-   on laptop screens and up, so 3-up now DOES trigger while pinned on
-   most desktop viewports — it only settles on 2-up when the pinned
-   sidebar and a narrower viewport leave the scroll column genuinely
-   tight, matching how this grid already looked on tablet-width
-   viewports before this feature existed. */
-@container split-scroll (min-width: 930px) {
+/* Projects now lives outside .split-layout-scroll as its own full-width
+   .page-wrap section (see .projects-bubble below), so its grid reacts to
+   the real viewport width again — a plain media query, not the container
+   query the old in-column placement needed. 980px matches the split
+   layout's own breakpoint above, the same point at which the page has
+   room to spare for a third column. */
+@media (min-width: 980px) {
   .project-grid { grid-template-columns: repeat(3, 1fr); }
 }
 
@@ -1029,6 +1049,45 @@ html.js-reveal .reveal.in-view { opacity: 1; transform: translateY(0); }
 .factors-card ul { list-style: none; display: flex; flex-direction: column; gap: var(--space-2); }
 .factors-card li { font-size: var(--text-xs); color: var(--color-text-secondary); padding-left: var(--space-4); position: relative; }
 .factors-card li::before { content: "✓"; position: absolute; left: 0; color: var(--color-scale-4); font-weight: var(--weight-bold); }
+
+/* ---------- Personal Projects: bubble-grow, scroll-scrubbed ----------
+   The section lives outside the split grid now (see the page-shell note
+   above), so it gets its own scroll-DRIVEN treatment rather than the
+   one-shot .reveal fade-up every other card uses — literally "grows
+   from a bubble," not a fade: clip-path starts as a small centered
+   circle and expands to a circle comfortably larger than the panel's
+   own diagonal (150% at 50% 50% guarantees full rectangular coverage
+   regardless of aspect ratio), paired with a subtle scale-up so the
+   growth reads in the panel's own size, not just its clipped
+   visibility.
+
+   Scroll-SCRUBBED, not class-toggled-with-a-canned-transition: script.js
+   (see the matching comment there) computes a continuous 0–1
+   --bubble-progress custom property every rAF frame, directly off how
+   far #projects has scrolled through its enter/exit range — the exact
+   same "drive a value straight off scroll position" technique already
+   used for .exp-line-fill's transform: scaleY() below. Both the circle
+   radius and the scale factor are `calc()` expressions of that single
+   property, so the bubble's size at any instant is a direct function of
+   scroll position, not a fixed-duration animation racing toward a
+   target class. That's also what makes it bidirectional for free: JS
+   updates --bubble-progress on every frame regardless of scroll
+   direction, so scrolling back out of view naturally drives the same
+   property back down through the same calc(), no separate exit
+   animation needed. Deliberately NO `transition` on clip-path/transform
+   — a scroll-scrubbed value fed fresh every animation frame doesn't
+   need (and would visibly lag/rubber-band behind) an eased transition
+   chasing it. clip-path and transform remain the only two properties
+   driven — both compositor-only, no width/height/filter — matching the
+   site's existing mobile-performance rule for animated properties.
+   Fail-safe default (no .js-bubble on <html>, e.g. reduced motion or no
+   JS) is fully visible, same principle as .reveal. */
+.projects-bubble { clip-path: none; transform: none; }
+html.js-bubble .projects-bubble {
+  --bubble-progress: 0;
+  clip-path: circle(calc(12% + var(--bubble-progress) * 138%) at 50% 50%);
+  transform: scale(calc(0.94 + var(--bubble-progress) * 0.06));
+}
 
 /* ---------- Personal Projects ---------- */
 .project-grid {
